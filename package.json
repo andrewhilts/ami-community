@@ -1,0 +1,22 @@
+{
+  "name": "ami-community",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "cors": "^2.7.1",
+    "cookie-parser": "^1.4.0",
+    "csurf": "^1.8.3",
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "express-rate-limit": "^2.0.2",
+    "express-session": "^1.12.1",
+    "helmet": "^0.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
