@@ -5,20 +5,21 @@ var helmet = require('helmet');
 var cookieParser = require('cookie-parser')
 var csrf = require('csurf')
 var cors = require('cors');
-
+var bookshelf = require('./database/db').db;
+var Request = require('./models/request')(bookshelf);
 var app = express();
 
 var limiter = rateLimit({
 	windowMS: 60000,
 	delayAfter: 0,
 	delayMS: 0,
-	max: 5,
+	max: 3,
 	message: "Too many requests. Please try again later.",
 	statusCode: 429
 });
 
-var enrollmentController = require('./controllers/enrollmentController');
-var feedbackController = require('./controllers/feedbackController');
+var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request);
+var feedbackController = require('./controllers/feedbackController/index.js').feedbackController();
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 app.set('port', process.env.PORT || 3000);
