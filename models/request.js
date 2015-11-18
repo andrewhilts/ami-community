@@ -32,4 +32,4 @@ var Request = function(bookshelf){
 	}
 	return this;
 }
-module.exports = Request;
+module.exports.RequestController = Request;

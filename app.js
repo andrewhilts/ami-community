@@ -6,7 +6,11 @@ var cookieParser = require('cookie-parser')
 var csrf = require('csurf')
 var cors = require('cors');
 var bookshelf = require('./database/db').db;
-var Request = require('./models/request')(bookshelf);
+var Request = require('./models/request.js').RequestController(bookshelf);
+var Subscription = require('./models/subscription.js').SubscriptionController(bookshelf);
+var Event = require('./models/event.js').EventController(bookshelf);
+var RequestEvent = require('./models/requestevent.js').RequestEventController(bookshelf);
+
 var app = express();
 
 var limiter = rateLimit({
@@ -18,7 +22,7 @@ var limiter = rateLimit({
 	statusCode: 429
 });
 
-var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request);
+var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController();
 // var parseForm = bodyParser.urlencoded({ extended: false })
 

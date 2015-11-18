@@ -19,6 +19,12 @@ var Event = function(bookshelf){
 		.save();
 		return event;
 	}
+	this.getJurisdictionEvents = function(jurisdiction_id){
+		var events = new EventModel()
+		.query({where: {"jurisdiction_id": jurisdiction_id}})
+		.fetchAll()
+		return events;
+	}
 	return this;
 }
-module.exports = Event;
+module.exports.EventController = Event;

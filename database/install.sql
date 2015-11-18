@@ -22,13 +22,17 @@ CREATE TABLE events (
 );
 
 CREATE TABLE request_contacts (
+	request_contact_id bigserial PRIMARY KEY,
 	email_address varchar(255) REFERENCES contacts(email_address) ON DELETE CASCADE,
 	request_id bigint REFERENCES requests(request_id)
 );
 
 CREATE TABLE request_events (
+	request_event_id bigserial PRIMARY KEY,
 	event_id bigint REFERENCES events(event_id),
 	request_id bigint REFERENCES requests(request_id),
+	request_contact_id bigint REFERENCES request_contacts(request_contact_id) ON DELETE CASCADE,
 	email_sent BOOLEAN,
-	email_schedule_date date
+	email_schedule_date date,
 );
+CREATE INDEX schedule_date ON request_events (email_schedule_date);
