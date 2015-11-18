@@ -1,11 +1,30 @@
 var async = require('async');
-var enrollmentController = function(Request, Subscription, Event, RequestEvent){
+var enrollmentController = function(Request, Subscription, Event, RequestEvent, Email){
 	this.getForm = function(req, res) {
 		res.json({
 			title: 'Enrollment!'
 		});
 	};
 	this.submit = function(req, res) {
+		var validateRequest = function(callback){
+			Request.validateRequest(
+				req.body.data.operator.id,
+				req.body.email.address
+			)
+			.then(function(collection){
+				if(collection.length){
+					callback("Sorry, you've already created a request to " + req.body.data.operator.title + " recently.");
+				}
+				else{
+					callback(null)
+				}
+			})
+			.catch(function(err){
+				console.log(err);
+				callback("System Error. Can't save request.");
+			})
+		}
+
 		var saveRequest = function(callback){
 			console.log("saveRequest")
 			Request.save(
@@ -102,13 +121,49 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent){
 			});
 		}
 
+		var sendFirstEmail = function(savedRequest, requestCount, savedContact, eventCollection, callback){
+			var consent = req.body.subscribe;
+			if(consent){
+				var email = new Email();
+				var address = savedContact.get('email_address');
+				var operator_title = savedRequest.get("operator_title");
+				email.send(
+					{
+						"to": [{email: address}],
+						"subject": "Thanks for using Access My Info",
+						"merge_vars": [{
+				            "rcpt": address,
+				            "vars": [{
+			                    "name": "operator_title",
+			                    "content": operator_title
+				            }]
+				        }]
+					},
+					{
+						template_name: "signup-en",
+						template_content: []
+					}
+				)
+				.then(function(result){
+					callback(null, savedRequest, requestCount, savedContact, result);
+				})
+				.catch(function(e){
+					callback(e);
+				});
+			}
+			else{
+				callback(null, savedRequest, requestCount, savedContact, result);
+			}
+		}
+
 		async.waterfall([
+			validateRequest,
 			saveRequest,
 			getRequestCount,
 			subscribeUser,
 			getJurisdictionEvents,
-			scheduleRequestEvents
-			// , sendFirstEmail
+			scheduleRequestEvents,
+			sendFirstEmail
 		], buildMessage);
 	};
 	

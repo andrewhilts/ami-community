@@ -13,7 +13,7 @@ var RequestEvent = function(bookshelf){
 		'model': RequestEventModel
 	});
 	this.save = function(request, eventModel, requestContact){
-		var emailScheduleDate = moment().add(parseInt(eventModel.get('days_to_reminder'), 'days'));
+		var emailScheduleDate = moment().add(parseInt(eventModel.get('days_to_reminder')), 'days');
 		return requestEvent = new RequestEventModel({
 			request_id: request.get('request_id'),
 			event_id: eventModel.get('event_id'),

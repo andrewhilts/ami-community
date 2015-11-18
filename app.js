@@ -10,6 +10,7 @@ var Request = require('./models/request.js').RequestController(bookshelf);
 var Subscription = require('./models/subscription.js').SubscriptionController(bookshelf);
 var Event = require('./models/event.js').EventController(bookshelf);
 var RequestEvent = require('./models/requestevent.js').RequestEventController(bookshelf);
+var Email = require('./models/email.js').EmailModel;
 
 var app = express();
 
@@ -22,7 +23,7 @@ var limiter = rateLimit({
 	statusCode: 429
 });
 
-var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent);
+var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController();
 // var parseForm = bodyParser.urlencoded({ extended: false })
 

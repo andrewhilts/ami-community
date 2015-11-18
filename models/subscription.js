@@ -113,7 +113,8 @@ var Subscription = function(bookshelf){
 					self.validateEmail,
 					self.contactExists,
 					self.saveIfNotExists,
-					self.saveRequestContact
+					self.saveRequestContact,
+					self.verify
 				], function(err, result){
 					if(err){
 						reject(err);
