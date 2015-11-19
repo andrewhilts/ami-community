@@ -48,6 +48,9 @@ var Request = function(bookshelf){
 		.count('*');
 		return promise;
 	}
+	this.getById = function(request_id){
+		return new RequestModel().where("request_id", request_id).fetch();
+	}
 	return this;
 }
 module.exports.RequestController = Request;

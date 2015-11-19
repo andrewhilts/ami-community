@@ -1,4 +1,6 @@
 var async = require('async');
+var emailVerificationController = require('../emailVerificationController').emailVerificationController;
+
 var enrollmentController = function(Request, Subscription, Event, RequestEvent, Email){
 	this.getForm = function(req, res) {
 		res.json({
@@ -71,41 +73,9 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			});
 		}
 
-		var getJurisdictionEvents = function(savedRequest, requestCount, savedContact, callback){
-			console.log("getJurisdictionEvents")
-			var consent = req.body.subscribe;
-			if(consent){
-				Event.getJurisdictionEvents(savedRequest.get('operator_jurisdiction_id'))
-				.then(function(eventCollection){
-					callback(null, savedRequest, requestCount, savedContact, eventCollection);
-				})
-				.catch(function(error){
-					callback(error);
-				})
-			}
-			else{
-				callback(null, savedRequest, requestCount, savedContact, null);
-			}
-		}
+		
 
-		var scheduleRequestEvents = function(savedRequest, requestCount, savedContact, eventCollection, callback){
-			console.log("scheduleRequestEvents")
-			var consent = req.body.subscribe;
-			if(consent){
-				RequestEvent.saveMany(savedRequest, eventCollection, savedContact)
-				.then(function(){
-					callback(null, savedRequest, requestCount, savedContact, null);
-				})
-				.catch(function(error){
-					callback(error);
-				});
-			}
-			else{
-				callback(null, savedRequest, requestCount, savedContact, null);
-			}
-		}
-
-		var buildMessage = function(err, savedRequest, requestCount, savedContact, callback){
+		var buildMessage = function(err, savedRequest, requestCount, savedContact, sendResult){
 			var msg;
 			if(err){
 				msg = err;
@@ -121,39 +91,16 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			});
 		}
 
-		var sendFirstEmail = function(savedRequest, requestCount, savedContact, eventCollection, callback){
-			var consent = req.body.subscribe;
-			if(consent){
-				var email = new Email();
-				var address = savedContact.get('email_address');
-				var operator_title = savedRequest.get("operator_title");
-				email.send(
-					{
-						"to": [{email: address}],
-						"subject": "Thanks for using Access My Info",
-						"merge_vars": [{
-				            "rcpt": address,
-				            "vars": [{
-			                    "name": "operator_title",
-			                    "content": operator_title
-				            }]
-				        }]
-					},
-					{
-						template_name: "signup-en",
-						template_content: []
-					}
-				)
-				.then(function(result){
-					callback(null, savedRequest, requestCount, savedContact, result);
-				})
-				.catch(function(e){
-					callback(e);
-				});
-			}
-			else{
+		var verifyEmail = function(savedRequest, requestCount, savedContact, callback){
+			console.log("verifyEmail");
+			var verifier = new emailVerificationController(Subscription);
+			verifier.createVerificationRequest(savedRequest, savedContact)
+			.then(function(result){
 				callback(null, savedRequest, requestCount, savedContact, result);
-			}
+			})
+			.catch(function(e){
+				callback(e);
+			})
 		}
 
 		async.waterfall([
@@ -161,11 +108,118 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			saveRequest,
 			getRequestCount,
 			subscribeUser,
-			getJurisdictionEvents,
-			scheduleRequestEvents,
-			sendFirstEmail
+			verifyEmail
 		], buildMessage);
 	};
+
+	this.verify = function(req, res){
+		var handleToken = function(callback){						
+			var token = req.query.token;
+			var verifier = new emailVerificationController(Subscription);
+			verifier.handleTokenResponse(token)
+			.then(function(requestContact){
+				console.log("verification finished");
+				callback(null, requestContact);
+			})
+			.catch(function(e){
+				console.log("verification error");
+				callback(e);
+			})
+		}
+
+		var getRequestByContact = function(requestContact, callback){
+			console.log("Getting request by contact", requestContact.get('request_id'));
+			Request.getById(requestContact.get('request_id'))
+			.then(function(request){
+				if(request){
+					console.log("request", request);
+					callback(null, request, requestContact);
+				}
+				else{
+					callback("No request by that ID");
+				}
+			})
+			.catch(function(e){
+				callback(e);
+			})
+		}
+
+		var getJurisdictionEvents = function(request, requestContact, callback){
+			console.log("getJurisdictionEvents", request.get('operator_jurisdiction_id'))
+			Event.getJurisdictionEvents(request.get('operator_jurisdiction_id'))
+			.then(function(eventCollection){
+				callback(null, request, requestContact, eventCollection);
+			})
+			.catch(function(error){
+				callback(error);
+			})
+		}
+
+		var scheduleRequestEvents = function(request, requestContact, eventCollection, callback){
+			console.log("scheduleRequestEvents")
+			RequestEvent.saveMany(request, eventCollection, requestContact)
+			.then(function(){
+				callback(null, request, requestContact);
+			})
+			.catch(function(error){
+				callback(error);
+			});
+		}
+
+		var sendConfirmationEmail = function(request, requestContact, callback){
+			var email = new Email();
+			var address = requestContact.get('email_address');
+			var operator_title = request.get("operator_title");
+			email.send(
+				{
+					"to": [{email: address}],
+					"subject": "Thanks for using Access My Info",
+					"merge_vars": [{
+			            "rcpt": address,
+			            "vars": [{
+		                    "name": "operator_title",
+		                    "content": operator_title
+			            }]
+			        }]
+				},
+				{
+					template_name: "email-confirmation-en",
+					template_content: []
+				}
+			)
+			.then(function(result){
+				callback(null, request, requestContact, result);
+			})
+			.catch(function(e){
+				callback(e);
+			});
+		}
+
+		if(typeof req.query.token !== "undefined"){
+			async.waterfall([
+				handleToken,
+				getRequestByContact,
+				getJurisdictionEvents,
+				scheduleRequestEvents,
+				sendConfirmationEmail
+			], function(err, result){
+				if(err){
+					msg = err;
+				}
+				else{
+					msg = "Email verified, and subscribed to feedback notifications";
+				}
+				res.json({
+					message: msg
+				});
+			});
+		}
+		else{
+			res.json({
+				message: 'Error: No token provided'
+			});
+		}
+	}
 	
 	return this;
 }

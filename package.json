@@ -4,18 +4,33 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "cors": "^2.7.1",
     "cookie-parser": "^1.4.0",
-    "csurf": "^1.8.3",
+    "async": "^1.5.0",
     "body-parser": "^1.14.1",
+    "bookshelf": "^0.9.1",
+    "csurf": "^1.8.3",
     "express": "^4.13.3",
+    "email-validator": "^1.0.3",
+    "cors": "^2.7.1",
     "express-rate-limit": "^2.0.2",
     "express-session": "^1.12.1",
-    "helmet": "^0.14.0"
+    "helmet": "^0.14.0",
+    "knex": "^0.9.0",
+    "lodash": "^3.10.1",
+    "mandrill-api": "^1.0.45",
+    "moment": "^2.10.6",
+    "node-uuid": "^1.4.7",
+    "pg": "^4.4.3",
+    "sleep": "^3.0.0",
+    "q": "^1.4.1"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "openeffect:~/ami-community"
   },
   "author": "",
   "license": "ISC"

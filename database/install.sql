@@ -8,6 +8,12 @@ CREATE TABLE requests (
 	dateadded timestamp
 );
 
+CREATE TABLE request_services (
+	request_service_id bigserial PRIMARY KEY,
+	request_id bigint REFERENCES requests(request_id) ON DELETE CASCADE,
+	service_id bigint
+);
+
 CREATE TABLE contacts (
 	email_address VARCHAR(255) PRIMARY KEY
 );
@@ -24,7 +30,10 @@ CREATE TABLE events (
 CREATE TABLE request_contacts (
 	request_contact_id bigserial PRIMARY KEY,
 	email_address varchar(255) REFERENCES contacts(email_address) ON DELETE CASCADE,
-	request_id bigint REFERENCES requests(request_id)
+	request_id bigint REFERENCES requests(request_id),
+	verification_token uuid,
+	token_expiration_date date,
+	verified BOOlEAN
 );
 
 CREATE TABLE request_events (
@@ -33,6 +42,6 @@ CREATE TABLE request_events (
 	request_id bigint REFERENCES requests(request_id),
 	request_contact_id bigint REFERENCES request_contacts(request_contact_id) ON DELETE CASCADE,
 	email_sent BOOLEAN,
-	email_schedule_date date,
+	email_schedule_date date
 );
 CREATE INDEX schedule_date ON request_events (email_schedule_date);

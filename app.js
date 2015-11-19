@@ -53,6 +53,7 @@ app.get('/enroll', enrollmentController.getForm);
 app.post('/enroll', enrollmentController.submit);
 app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', feedbackController.submit);
+app.get('/verify', enrollmentController.verify);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));

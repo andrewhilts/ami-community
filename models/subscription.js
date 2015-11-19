@@ -12,6 +12,7 @@ var Subscription = function(bookshelf){
 		'tableName': 'request_contacts',
 		'idAttribute': 'request_contact_id'
 	});
+	this.RequestContactModel = RequestContactModel;
 	var ContactCollection = bookshelf.Collection.extend({
 		'model': ContactModel
 	});
@@ -113,8 +114,7 @@ var Subscription = function(bookshelf){
 					self.validateEmail,
 					self.contactExists,
 					self.saveIfNotExists,
-					self.saveRequestContact,
-					self.verify
+					self.saveRequestContact
 				], function(err, result){
 					if(err){
 						reject(err);
