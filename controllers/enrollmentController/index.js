@@ -3,28 +3,36 @@ var emailVerificationController = require('../emailVerificationController').emai
 
 var enrollmentController = function(Request, Subscription, Event, RequestEvent, Email){
 	this.getForm = function(req, res) {
-		res.json({
-			title: 'Enrollment!'
-		});
+		// token = req.csrfToken()
+		// console.log(token);
+		// res.json({
+		// 	csrf: token
+		// });
 	};
 	this.submit = function(req, res) {
 		var validateRequest = function(callback){
-			Request.validateRequest(
-				req.body.data.operator.id,
-				req.body.email.address
-			)
-			.then(function(collection){
-				if(collection.length){
-					callback("Sorry, you've already created a request to " + req.body.data.operator.title + " recently.");
-				}
-				else{
-					callback(null)
-				}
-			})
-			.catch(function(err){
-				console.log(err);
-				callback("System Error. Can't save request.");
-			})
+			var consent = req.body.subscribe;
+			if(consent){
+				Request.validateRequest(
+					req.body.data.operator.id,
+					req.body.email.address
+				)
+				.then(function(collection){
+					if(collection.length){
+						callback("Sorry, you've already created a request to " + req.body.data.operator.title + " recently.");
+					}
+					else{
+						callback(null)
+					}
+				})
+				.catch(function(err){
+					console.log(err);
+					callback("System Error. Can't save request.");
+				})
+			}
+			else{
+				callback(null);
+			}
 		}
 
 		var saveRequest = function(callback){
@@ -64,13 +72,18 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			console.log("subscribeUser")
 			var consent = req.body.subscribe;
 			var email = req.body.email.address;
-			Subscription.subscribe(consent, email, savedRequest.get('request_id'))
-			.then(function(savedContact){
-				callback(null, savedRequest, requestCount, savedContact);
-			})
-			.catch(function(error){
-				callback(error);
-			});
+			if(consent){
+				Subscription.subscribe(consent, email, savedRequest.get('request_id'))
+				.then(function(savedContact){
+					callback(null, savedRequest, requestCount, savedContact);
+				})
+				.catch(function(error){
+					callback(error);
+				});
+			}
+			else{
+				callback(null, savedRequest, requestCount, null);
+			}
 		}
 
 		
@@ -93,14 +106,19 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 
 		var verifyEmail = function(savedRequest, requestCount, savedContact, callback){
 			console.log("verifyEmail");
-			var verifier = new emailVerificationController(Subscription);
-			verifier.createVerificationRequest(savedRequest, savedContact)
-			.then(function(result){
-				callback(null, savedRequest, requestCount, savedContact, result);
-			})
-			.catch(function(e){
-				callback(e);
-			})
+			if(savedContact){
+				var verifier = new emailVerificationController(Subscription);
+				verifier.createVerificationRequest(savedRequest, savedContact)
+				.then(function(result){
+					callback(null, savedRequest, requestCount, savedContact, result);
+				})
+				.catch(function(e){
+					callback(e);
+				})
+			}
+			else{
+				callback(null, savedRequest, requestCount);
+			}
 		}
 
 		async.waterfall([
@@ -112,7 +130,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 		], buildMessage);
 	};
 
-	this.verify = function(req, res){
+	this.verifyAndEnroll = function(req, res){
 		var handleToken = function(callback){						
 			var token = req.query.token;
 			var verifier = new emailVerificationController(Subscription);
