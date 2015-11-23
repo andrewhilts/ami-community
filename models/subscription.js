@@ -13,6 +13,8 @@ var Subscription = function(bookshelf){
 		'idAttribute': 'request_contact_id'
 	});
 	this.RequestContactModel = RequestContactModel;
+	this.ContactModel = ContactModel;
+	
 	var ContactCollection = bookshelf.Collection.extend({
 		'model': ContactModel
 	});

@@ -14,6 +14,8 @@ var Request = function(bookshelf){
 		'tableName': 'request_contacts',
 		'idAttribute': 'request_contact_id'
 	});
+	this.RequestModel = RequestModel;
+	this.RequestContact = RequestContact;
 	this.validateRequest = function(operator_id, email_address){
 		// Get history of requests for email
 		var validationPeriodStart = moment().subtract(60, 'days');

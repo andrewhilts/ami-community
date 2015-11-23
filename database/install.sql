@@ -24,6 +24,8 @@ CREATE TABLE events (
 	name VARCHAR(255),
 	description TEXT,
 	days_to_reminder bigint,
+	email_subject VARCHAR(255),
+	email_template VARCHAR(255),
 	CONSTRAINT u_constraint UNIQUE (name, jurisdiction_id)
 );
 

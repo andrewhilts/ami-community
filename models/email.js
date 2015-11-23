@@ -26,7 +26,7 @@ var Email = function(){
 	    "signing_domain": null,
 	    "return_path_domain": null,
 	    "merge": true,
-	    "merge_language": "handlebars",
+	    "merge_language": "handlebars"
 	}
 	this.async = true;
 	this.ip_pool = null;

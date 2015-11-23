@@ -2,7 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var rateLimit = require('express-rate-limit');
 var helmet = require('helmet');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
+// var session = require('express-session');
 var csrf = require('csurf')
 var cors = require('cors');
 var bookshelf = require('./database/db').db;
@@ -11,7 +12,8 @@ var Subscription = require('./models/subscription.js').SubscriptionController(bo
 var Event = require('./models/event.js').EventController(bookshelf);
 var RequestEvent = require('./models/requestevent.js').RequestEventController(bookshelf);
 var Email = require('./models/email.js').EmailModel;
-
+var policy = require('./conf/policy.conf').policy;
+var uuid = require('node-uuid');
 var app = express();
 
 var limiter = rateLimit({
@@ -25,35 +27,40 @@ var limiter = rateLimit({
 
 var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController();
+var unsubscribeController = require('./controllers/unsubscribeController/index.js').unsubscribeController(Subscription);
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 app.set('port', process.env.PORT || 3000);
 
 app.use(helmet());
 app.use(cors({
-	origin: "http://0.0.0.0:9000"
+	origin: policy.AMIFrontEndURL
 }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(limiter);
-app.use(cookieParser("helmet"));
+// app.use(cookieParser({''}));
+// app.use(csrf());
 
-// app.use(csrf({ cookie: true }));
 
-app.use(function (err, req, res, next) {
-  if (err.code !== 'EBADCSRFTOKEN') return next(err)
+// app.use(function (err, req, res, next) {
+// 	console.log(req.session);
+// 	console.log(req.body._csrf);
+//   if (err.code !== 'EBADCSRFTOKEN') return next(err)
 
-  // handle CSRF token errors here
-console.log(req);
-  res.status(403)
-  res.send('form tampered with')
-})
+//   // handle CSRF token errors here
+// 	res.status(403)
+// 	res.json({
+// 		title: 'Error: Form tampered with.'
+// 	});
+// })
 
 app.get('/enroll', enrollmentController.getForm);
 app.post('/enroll', enrollmentController.submit);
+app.get('/verify', enrollmentController.verifyAndEnroll);
 app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', feedbackController.submit);
-app.get('/verify', enrollmentController.verify);
+app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));

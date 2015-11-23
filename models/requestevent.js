@@ -9,9 +9,11 @@ var RequestEvent = function(bookshelf){
 		'tableName': 'request_events',
 		'idAttribute': 'request_event_id'
 	});
+	self.RequestEventModel = RequestEventModel;
 	var RequestEventCollection = bookshelf.Collection.extend({
-		'model': RequestEventModel
+		'model': self.RequestEventModel
 	});
+	self.RequestEventCollection = RequestEventCollection;
 	this.save = function(request, eventModel, requestContact){
 		var emailScheduleDate = moment().add(parseInt(eventModel.get('days_to_reminder')), 'days');
 		return requestEvent = new RequestEventModel({

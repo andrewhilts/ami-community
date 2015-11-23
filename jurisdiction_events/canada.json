@@ -4,12 +4,14 @@
 		{
 		"name": "Check up on requester",
 		"description": "This event sends a reminder email to the requester after the mandated period of time the operator has to respond has expired. Requester will be asked if they've gotten a response, sent a link to feedback form, or guidance on how to proceed if haven't gotten a response yet.",
-		"days_to_reminder": 30
+		"days_to_reminder": 30,
+		"email_template": "check-up-en"
 		},
 		{
 		"name": "Solicit Feedback",
 		"description": "Ask users for feedback if they haven't already provided it.",
-		"days_to_reminder": 70
+		"days_to_reminder": 70,
+		"email_template": "feedback-en"
 		}
 	]
 }

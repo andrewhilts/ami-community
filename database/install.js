@@ -86,7 +86,9 @@ formatDataForSave = function(data){
 				'jurisdiction_id' : jurisdiction_id,
 				'name' : data.events[i].name,
 				'description' : data.events[i].description,
-				'days_to_reminder' : data.events[i].days_to_reminder
+				'days_to_reminder' : data.events[i].days_to_reminder,
+				'email_template' : data.events[i].email_template,
+				'email_subject' : data.events[i].email_subject
 			}
 		}
 	}
