@@ -3,9 +3,11 @@ var mandrill = require('mandrill-api');
 var mandrill_client = new mandrill.Mandrill(mandrillAPIKey);
 var Q = require('q');
 var _ = require('lodash');
+var policy = require('../conf/policy.conf').policy;
 
 var Email = function(){
 	var self = this;
+	var unsubLink = policy.unsubLink
 	this.message = {
 		"subject": "A message from Access My Info",
 		"from_email": "notifications@openeffect.ca",
@@ -26,6 +28,12 @@ var Email = function(){
 	    "signing_domain": null,
 	    "return_path_domain": null,
 	    "merge": true,
+	    "global_merge_vars": [
+	    	{
+				name: "unsubscribe_link",
+				content: policy.unsubLink
+			}
+	    ],
 	    "merge_language": "handlebars"
 	}
 	this.async = true;

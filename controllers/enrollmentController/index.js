@@ -2,13 +2,6 @@ var async = require('async');
 var emailVerificationController = require('../emailVerificationController').emailVerificationController;
 
 var enrollmentController = function(Request, Subscription, Event, RequestEvent, Email){
-	this.getForm = function(req, res) {
-		// token = req.csrfToken()
-		// console.log(token);
-		// res.json({
-		// 	csrf: token
-		// });
-	};
 	this.submit = function(req, res) {
 		var validateRequest = function(callback){
 			var consent = req.body.subscribe;
@@ -197,7 +190,8 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			            "vars": [{
 		                    "name": "operator_title",
 		                    "content": operator_title
-			            }]
+			            }
+						]
 			        }]
 				},
 				{
@@ -220,12 +214,12 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				getJurisdictionEvents,
 				scheduleRequestEvents,
 				sendConfirmationEmail
-			], function(err, result){
+			], function(err, request, requestContact, result){
 				if(err){
 					msg = err;
 				}
 				else{
-					msg = "Email verified, and subscribed to feedback notifications";
+					msg = "The email address " + requestContact.get('email_address')+ " has been verified, and is now subscribed to AMI notifications";
 				}
 				res.json({
 					message: msg

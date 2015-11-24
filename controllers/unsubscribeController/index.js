@@ -24,7 +24,7 @@ var unsubscribeController = function(Subscription){
 		})
 		.catch(function(e){
 			res.json({
-				"message": "Unable to unsubcribe " + email_address + " from all AMI messages."
+				"message": "Unable to unsubscribe " + email_address + "."
 			});
 		})
 	}

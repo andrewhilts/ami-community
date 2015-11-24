@@ -34,7 +34,7 @@ var RequestContactVerifier = function(Subscription){
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
 		var token = requestContact.get('verification_token');
-		var verificationURL = policy.emailVerificationURL + "?token=" + token;
+		var verificationURL = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.emailVerification + "?token=" + token;
 		return email.send(
 			{
 				"to": [{email: address}],
@@ -92,7 +92,7 @@ var RequestContactVerifier = function(Subscription){
 		return new Q.Promise(function(resolve,reject){
 			if(!self.isRequestContactTokenExpired(requestContact)){
 				if(self.isRequestAlreadyVerified(requestContact)){
-					reject("Token already verified");
+					reject("Already verified.");
 				}
 				else{
 					self.markRequestContactAsVerified(requestContact)
@@ -100,12 +100,12 @@ var RequestContactVerifier = function(Subscription){
 						resolve(null, savedRequestContact);
 					})
 					.catch(function(e){
-						reject("Unable to verify request");
+						reject("Unable to verify request.");
 					})
 				}
 			}
 			else{
-				reject("Token expired.");
+				reject("Verification token expired.");
 			}
 		});
 	}
@@ -131,7 +131,7 @@ var RequestContactVerifier = function(Subscription){
 							callback(null, requestContact);
 						}	
 						else{
-							callback("Cannot find record for this email");
+							callback("Cannot find record for this email address.");
 						}
 					})
 					.catch(function(e){
@@ -166,10 +166,15 @@ var RequestContactVerifier = function(Subscription){
 					console.log("getRequestContactByToken");
 					self.getRequestContactByToken(token)
 					.then(function(requestContact){
-						callback(null, requestContact);
+						if(requestContact){
+							callback(null, requestContact);
+						}
+						else{
+							callback("Unable to find a contact using that token.");
+						}
 					})
 					.catch(function(e){
-						callback(e);
+						callback("Unable to find a contact using that token.");
 					});
 				},
 				function(requestContact, callback){

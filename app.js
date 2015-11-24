@@ -20,7 +20,7 @@ var limiter = rateLimit({
 	windowMS: 60000,
 	delayAfter: 0,
 	delayMS: 0,
-	max: 3,
+	max: policy.rateLimitMaxPerMinute,
 	message: "Too many requests. Please try again later.",
 	statusCode: 429
 });
@@ -34,7 +34,7 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(helmet());
 app.use(cors({
-	origin: policy.AMIFrontEndURL
+	origin: policy.AMIFrontEnd.baseURL
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -55,10 +55,10 @@ app.use(limiter);
 // 	});
 // })
 
-app.get('/enroll', enrollmentController.getForm);
+// app.get('/enroll', enrollmentController.getForm);
 app.post('/enroll', enrollmentController.submit);
 app.get('/verify', enrollmentController.verifyAndEnroll);
-app.get('/feedback', feedbackController.getForm);
+// app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
