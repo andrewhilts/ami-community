@@ -19,12 +19,24 @@ var unsubscribeController = function(Subscription){
 		self.unsubscribe(email_address)
 		.then(function(model){
 			res.json({
-				"message": "Successfully unsubscribed " + email_address + " from all AMI messages."
+				"message": {
+					"status_code": "U1",
+					"message:" "Successfully unsubscribed " + email_address + " from all AMI messages.",
+					"data": {
+						"email_address": email_address
+					}
+				}
 			});
 		})
 		.catch(function(e){
 			res.json({
-				"message": "Unable to unsubscribe " + email_address + "."
+				"message": {
+					"status_code": "U2",
+					"message": "Unable to unsubscribe " + email_address + ".",
+					"data": {
+						"email_address": email_address
+					}
+				}
 			});
 		})
 	}

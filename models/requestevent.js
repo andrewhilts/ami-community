@@ -39,7 +39,10 @@ var RequestEvent = function(bookshelf){
 				})
 				.catch(function(error){
 					console.log(error);
-					callback(error)
+					callback({
+						"status_code": "D1",
+						"message": "Database Error"
+					})
 				})
 			}, function(error){
 				if(error){

@@ -92,7 +92,10 @@ var RequestContactVerifier = function(Subscription){
 		return new Q.Promise(function(resolve,reject){
 			if(!self.isRequestContactTokenExpired(requestContact)){
 				if(self.isRequestAlreadyVerified(requestContact)){
-					reject("Already verified.");
+					reject({
+							"response_code": "", 
+							"message": "Already verified."
+						});
 				}
 				else{
 					self.markRequestContactAsVerified(requestContact)
@@ -100,12 +103,18 @@ var RequestContactVerifier = function(Subscription){
 						resolve(null, savedRequestContact);
 					})
 					.catch(function(e){
-						reject("Unable to verify request.");
+						reject({
+							"response_code": "", 
+							"message": "Database Error"
+						});
 					})
 				}
 			}
 			else{
-				reject("Verification token expired.");
+				reject({
+					"response_code": "", 
+					"message": "Verification token expired."
+				});
 			}
 		});
 	}
@@ -131,7 +140,10 @@ var RequestContactVerifier = function(Subscription){
 							callback(null, requestContact);
 						}	
 						else{
-							callback("Cannot find record for this email address.");
+							callback({
+								"response_code": "", 
+								"message": "Database Error"
+							});
 						}
 					})
 					.catch(function(e){
@@ -145,7 +157,10 @@ var RequestContactVerifier = function(Subscription){
 						callback(null, result);
 					})
 					.catch(function(e){
-						callback(e);
+						callback({
+							"response_code": "", 
+							"message": "Unable to send email."
+						});
 					});
 				}
 			], function(err, sendResult){
@@ -170,11 +185,17 @@ var RequestContactVerifier = function(Subscription){
 							callback(null, requestContact);
 						}
 						else{
-							callback("Unable to find a contact using that token.");
+							callback({
+								"response_code": "", 
+								"message": "Invalid token."
+							});
 						}
 					})
 					.catch(function(e){
-						callback("Unable to find a contact using that token.");
+						callback({
+							"response_code": "", 
+							"message": "Invalid token."
+						});
 					});
 				},
 				function(requestContact, callback){

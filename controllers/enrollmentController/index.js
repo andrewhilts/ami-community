@@ -12,7 +12,13 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				)
 				.then(function(collection){
 					if(collection.length){
-						callback("Sorry, you've already created a request to " + req.body.data.operator.title + " recently.");
+						callback({
+							"status_code": "R2", 
+							"message": "Sorry, you've already created a request to " + req.body.data.operator.title + " recently.",
+							"data": {
+								"operator": req.body.data.operator.title
+							}
+						});
 					}
 					else{
 						callback(null)
@@ -20,7 +26,10 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				})
 				.catch(function(err){
 					console.log(err);
-					callback("System Error. Can't save request.");
+					callback({
+						"status_code": "R3", 
+						"message": "System Error. Can't save request."
+					});
 				})
 			}
 			else{
@@ -42,7 +51,10 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			})
 			.catch(function(err){
 				console.log(err);
-				callback("System Error. Can't save request.");
+				callback({
+					"status_code": "R3", 
+					"message": "System Error. Can't save request."
+				});
 			})
 		}
 
@@ -57,7 +69,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			})
 			.catch(function(error){
 				console.log(error);
-				callback(error);
+				callback(null, savedRequest, "?");
 			});
 		}
 
@@ -87,9 +99,19 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				msg = err;
 			}
 			else{
-				msg = "Thank you. There are now " + requestCount + " requests created for " + savedRequest.get('operator_title') + " in " + savedRequest.get('operator_jurisdiction') + "."
+				message = "Thank you. There are now " + requestCount + " requests created for " + savedRequest.get('operator_title') + " in " + savedRequest.get('operator_jurisdiction') + "."
 				if(savedContact){
-					msg += " You will receive an email shortly explaining what to expect."	
+					message += " You will receive an email shortly explaining what to expect."	
+				}
+				data = {
+					count: requestCount,
+					operator: savedRequest.get('operator_title'),
+					jurisdiction: savedRequest.get('operator_jurisdiction')
+				}
+				msg = {
+					"status_code": "R1",
+					"message": message,
+					"data": data
 				}
 			}
 			res.json({
@@ -147,11 +169,17 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 					callback(null, request, requestContact);
 				}
 				else{
-					callback("No request by that ID");
+					callback({
+						"status_code": "V7", 
+						"message": "No AMI requests found for that email address"
+					});
 				}
 			})
 			.catch(function(e){
-				callback(e);
+				callback({
+					"status_code": "D1", 
+					"message": "Database Error."
+				});
 			})
 		}
 
@@ -162,7 +190,10 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				callback(null, request, requestContact, eventCollection);
 			})
 			.catch(function(error){
-				callback(error);
+				callback({
+					"status_code": "D1", 
+					"message": "Database Error."
+				});
 			})
 		}
 
@@ -173,7 +204,10 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				callback(null, request, requestContact);
 			})
 			.catch(function(error){
-				callback(error);
+				callback({
+					"status_code": "D1", 
+					"message": "Database Error."
+				});
 			});
 		}
 
@@ -203,7 +237,10 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				callback(null, request, requestContact, result);
 			})
 			.catch(function(e){
-				callback(e);
+				callback({
+					"status_code": "M1", 
+					"message": "Unable to sent email."
+				});
 			});
 		}
 
@@ -216,10 +253,16 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				sendConfirmationEmail
 			], function(err, request, requestContact, result){
 				if(err){
-					msg = err;
+					msg = err
 				}
 				else{
-					msg = "The email address " + requestContact.get('email_address')+ " has been verified, and is now subscribed to AMI notifications";
+					msg =	{
+						"status_code": "V1", 
+						"message": "The email address " + requestContact.get('email_address')+ " has been verified, and is now subscribed to AMI notifications",
+						"data": {
+							"email_address": requestContact.get('email_address')
+						}
+					}
 				}
 				res.json({
 					message: msg
@@ -228,7 +271,10 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 		}
 		else{
 			res.json({
-				message: 'Error: No token provided'
+				message: {
+					"status_code": "V5", 
+					"message": "No token provided."
+				}
 			});
 		}
 	}

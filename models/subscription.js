@@ -29,7 +29,10 @@ var Subscription = function(bookshelf){
 				callback(null);
 			}
 			else{
-				callback("Invalid email address");
+				callback({
+					"response_code": "M2", 
+					"message": "Invalid email address"
+				});
 			}
 		}
 		this.contactExists = function(callback){
@@ -39,15 +42,13 @@ var Subscription = function(bookshelf){
 			})
 			.fetch()
 			.then(function(savedContact){
-				if(savedContact){
 					callback(null, savedContact);
-				}
-				else{
-					callback(null, savedContact);
-				}
 			})
 			.catch(function(err){
-				callback(err);
+				callback({
+						"response_code": "D1", 
+						"message": "Database Error"
+					});
 			})
 		}
 		this.saveIfNotExists = function(savedContact, callback){
@@ -63,7 +64,10 @@ var Subscription = function(bookshelf){
 						callback(null, savedContact);
 					}
 					else{
-						callback("No contact saved");
+						callback({
+							"response_code": "D1", 
+							"message": "Database Error"
+						});
 					}
 				})
 				.catch(function(error){
@@ -84,15 +88,24 @@ var Subscription = function(bookshelf){
 						callback(null, savedRequestContact);
 					}
 					else{
-						callback("No contact saved");
+						callback({
+							"response_code": "D1", 
+							"message": "Database Error"
+						});
 					}
 				})
 				.catch(function(error){
-					callback(error);
+					callback({
+						"response_code": "D1", 
+						"message": "Database Error"
+					});
 				})
 			}
 			else{
-				callback("No consent given");
+				callback({
+						"response_code": "V7", 
+						"message": "No consent given"
+					});
 			}
 		}
 		this.save = function(consent, email_address){

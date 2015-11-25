@@ -1,0 +1,19 @@
+R1 Request created
+R2 Created a request to that company too recently
+R3 System Error. Can't save request
+
+D1 Database Error
+
+V1 Email Verified and enrolled
+V2 Already verified
+V3 Verification token expired
+V4 Invalid token
+V5 No token provided
+V6 No AMI requests found for that email 
+V7 No consent given
+
+M1 Unable to send email
+M2 Invalid email address
+
+U1 Unable to unsubcribe
+U2 Successfully unsubscribed
