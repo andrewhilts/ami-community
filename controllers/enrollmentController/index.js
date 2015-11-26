@@ -13,7 +13,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				.then(function(collection){
 					if(collection.length){
 						callback({
-							"status_code": "R2", 
+							"statusCode": "R2", 
 							"message": "Sorry, you've already created a request to " + req.body.data.operator.title + " recently.",
 							"data": {
 								"operator": req.body.data.operator.title
@@ -27,7 +27,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				.catch(function(err){
 					console.log(err);
 					callback({
-						"status_code": "R3", 
+						"statusCode": "R3", 
 						"message": "System Error. Can't save request."
 					});
 				})
@@ -52,7 +52,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			.catch(function(err){
 				console.log(err);
 				callback({
-					"status_code": "R3", 
+					"statusCode": "R3", 
 					"message": "System Error. Can't save request."
 				});
 			})
@@ -109,7 +109,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 					jurisdiction: savedRequest.get('operator_jurisdiction')
 				}
 				msg = {
-					"status_code": "R1",
+					"statusCode": "R1",
 					"message": message,
 					"data": data
 				}
@@ -170,14 +170,14 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				}
 				else{
 					callback({
-						"status_code": "V7", 
+						"statusCode": "V7", 
 						"message": "No AMI requests found for that email address"
 					});
 				}
 			})
 			.catch(function(e){
 				callback({
-					"status_code": "D1", 
+					"statusCode": "D1", 
 					"message": "Database Error."
 				});
 			})
@@ -191,7 +191,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			})
 			.catch(function(error){
 				callback({
-					"status_code": "D1", 
+					"statusCode": "D1", 
 					"message": "Database Error."
 				});
 			})
@@ -205,7 +205,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			})
 			.catch(function(error){
 				callback({
-					"status_code": "D1", 
+					"statusCode": "D1", 
 					"message": "Database Error."
 				});
 			});
@@ -238,7 +238,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			})
 			.catch(function(e){
 				callback({
-					"status_code": "M1", 
+					"statusCode": "M1", 
 					"message": "Unable to sent email."
 				});
 			});
@@ -257,7 +257,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				}
 				else{
 					msg =	{
-						"status_code": "V1", 
+						"statusCode": "V1", 
 						"message": "The email address " + requestContact.get('email_address')+ " has been verified, and is now subscribed to AMI notifications",
 						"data": {
 							"email_address": requestContact.get('email_address')
@@ -272,7 +272,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 		else{
 			res.json({
 				message: {
-					"status_code": "V5", 
+					"statusCode": "V5", 
 					"message": "No token provided."
 				}
 			});

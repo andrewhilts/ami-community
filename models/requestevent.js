@@ -40,7 +40,7 @@ var RequestEvent = function(bookshelf){
 				.catch(function(error){
 					console.log(error);
 					callback({
-						"status_code": "D1",
+						"statusCode": "D1",
 						"message": "Database Error"
 					})
 				})

@@ -20,8 +20,8 @@ var unsubscribeController = function(Subscription){
 		.then(function(model){
 			res.json({
 				"message": {
-					"status_code": "U1",
-					"message:" "Successfully unsubscribed " + email_address + " from all AMI messages.",
+					"statusCode": "U1",
+					"message": "Successfully unsubscribed " + email_address + " from all AMI messages.",
 					"data": {
 						"email_address": email_address
 					}
@@ -31,7 +31,7 @@ var unsubscribeController = function(Subscription){
 		.catch(function(e){
 			res.json({
 				"message": {
-					"status_code": "U2",
+					"statusCode": "U2",
 					"message": "Unable to unsubscribe " + email_address + ".",
 					"data": {
 						"email_address": email_address

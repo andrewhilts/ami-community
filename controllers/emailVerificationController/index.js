@@ -93,7 +93,7 @@ var RequestContactVerifier = function(Subscription){
 			if(!self.isRequestContactTokenExpired(requestContact)){
 				if(self.isRequestAlreadyVerified(requestContact)){
 					reject({
-							"response_code": "", 
+							"statusCode": "V2", 
 							"message": "Already verified."
 						});
 				}
@@ -104,7 +104,7 @@ var RequestContactVerifier = function(Subscription){
 					})
 					.catch(function(e){
 						reject({
-							"response_code": "", 
+							"statusCode": "D1", 
 							"message": "Database Error"
 						});
 					})
@@ -112,7 +112,7 @@ var RequestContactVerifier = function(Subscription){
 			}
 			else{
 				reject({
-					"response_code": "", 
+					"statusCode": "V3", 
 					"message": "Verification token expired."
 				});
 			}
@@ -141,7 +141,7 @@ var RequestContactVerifier = function(Subscription){
 						}	
 						else{
 							callback({
-								"response_code": "", 
+								"statusCode": "D1", 
 								"message": "Database Error"
 							});
 						}
@@ -158,7 +158,7 @@ var RequestContactVerifier = function(Subscription){
 					})
 					.catch(function(e){
 						callback({
-							"response_code": "", 
+							"statusCode": "M1", 
 							"message": "Unable to send email."
 						});
 					});
@@ -186,14 +186,14 @@ var RequestContactVerifier = function(Subscription){
 						}
 						else{
 							callback({
-								"response_code": "", 
+								"statusCode": "V4", 
 								"message": "Invalid token."
 							});
 						}
 					})
 					.catch(function(e){
 						callback({
-							"response_code": "", 
+							"statusCode": "V4", 
 							"message": "Invalid token."
 						});
 					});
