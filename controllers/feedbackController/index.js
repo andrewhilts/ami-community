@@ -44,6 +44,7 @@ var feedbackController = function(Feedback){
 		], 
 		function(err, textCollection, ordinalCollection, submission){
 			if(err){
+				res.status(400);
 				msg = {
 					"statusCode": "F2"
 				}
@@ -59,6 +60,7 @@ var feedbackController = function(Feedback){
 		});
 	  }
 	  else{
+	  	res.status(400);
 	  	res.json({
 			message: {
 				"statusCode": "F3"
