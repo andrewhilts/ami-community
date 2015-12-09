@@ -11,7 +11,7 @@ var Event = function(bookshelf){
 		'model': EventModel
 	});
 	this.save = function(name, description, jurisdiction_id, days_to_reminder, email_template, email_subject){
-		var event = new EventModel({
+		return new EventModel({
 			'name': name, 
 			'description': description, 
 			'jurisdiction_id': jurisdiction_id,
@@ -20,7 +20,6 @@ var Event = function(bookshelf){
 			"email_subject": email_subject
 		})
 		.save();
-		return event;
 	}
 	this.getJurisdictionEvents = function(jurisdiction_id){
 		var events = new EventModel()

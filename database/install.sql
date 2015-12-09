@@ -47,3 +47,16 @@ CREATE TABLE request_events (
 	email_schedule_date date
 );
 CREATE INDEX schedule_date ON request_events (email_schedule_date);
+
+CREATE TABLE feedback_submissions (
+	feedback_submission_id bigserial PRIMARY KEY,
+	feedback_submission_date timestamp
+);
+
+CREATE TABLE feedback_submission_items (
+	feedback_submission_item_id bigserial PRIMARY KEY,
+	feedback_submission_id bigint REFERENCES feedback_submissions(feedback_submission_id) ON DELETE CASCADE,
+	feedback_item_label VARCHAR(255),
+	int_value int,
+	text_value TEXT
+);

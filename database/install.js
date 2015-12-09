@@ -4,30 +4,30 @@ var async = require('async');
 
 var installQueryFile = './install.sql';
 var Event = require('../models/event').EventController(bookshelf);
-// Install database schema
-// fs.readFile(installQueryFile, "utf-8", function(err, installQuery){
-// 	if(!err){
-// 		bookshelf.knex.raw(installQuery).then(function(resp){
-// 			console.log(null, resp);
-// 		}).catch(function(error){
-// 			console.log(error);
-// 		});
-// 	}
-// 	else{
-// 		console.log(err);
-// 	}
-// });
-
-// Install jurisdiction event profiles
-var path = '../jurisdiction_events/';
-fs.readdir(path, function(err, files){
+Install database schema
+fs.readFile(installQueryFile, "utf-8", function(err, installQuery){
 	if(!err){
-		async.forEachOf(files, parseEventFile, function(err){
-			if(err) console.log(err);
-			console.log("hi");
+		bookshelf.knex.raw(installQuery).then(function(resp){
+			console.log(null, resp);
+		}).catch(function(error){
+			console.log(error);
 		});
 	}
+	else{
+		console.log(err);
+	}
 });
+
+// Install jurisdiction event profiles
+// var path = '../jurisdiction_events/';
+// fs.readdir(path, function(err, files){
+// 	if(!err){
+// 		async.forEachOf(files, parseEventFile, function(err){
+// 			if(err) console.log(err);
+// 			console.log("hi");
+// 		});
+// 	}
+// });
 
 parseEventFile = function(value, key, callback){
 	if(fs.lstatSync(path + value).isFile()){

@@ -12,6 +12,7 @@ var Subscription = require('./models/subscription.js').SubscriptionController(bo
 var Event = require('./models/event.js').EventController(bookshelf);
 var RequestEvent = require('./models/requestevent.js').RequestEventController(bookshelf);
 var Email = require('./models/email.js').EmailModel;
+var Feedback = require('./models/feedback.js').FeedbackModel(bookshelf);
 var policy = require('./conf/policy.conf').policy;
 var uuid = require('node-uuid');
 var app = express();
@@ -26,7 +27,7 @@ var limiter = rateLimit({
 });
 
 var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
-var feedbackController = require('./controllers/feedbackController/index.js').feedbackController();
+var feedbackController = require('./controllers/feedbackController/index.js').feedbackController(Feedback);
 var unsubscribeController = require('./controllers/unsubscribeController/index.js').unsubscribeController(Subscription);
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
