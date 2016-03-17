@@ -29,6 +29,7 @@ var limiter = rateLimit({
 var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController(Feedback);
 var unsubscribeController = require('./controllers/unsubscribeController/index.js').unsubscribeController(Subscription);
+var pdfController = require('./controllers/pdfController/index.js').pdfController();
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 app.set('port', process.env.PORT || 3000);
@@ -62,6 +63,8 @@ app.get('/verify', enrollmentController.verifyAndEnroll);
 // app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
+
+app.post('/pdf', pdfController.buildAndRespond)
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
