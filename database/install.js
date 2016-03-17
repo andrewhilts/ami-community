@@ -4,7 +4,7 @@ var async = require('async');
 
 var installQueryFile = './install.sql';
 var Event = require('../models/event').EventController(bookshelf);
-Install database schema
+// Install database schema
 fs.readFile(installQueryFile, "utf-8", function(err, installQuery){
 	if(!err){
 		bookshelf.knex.raw(installQuery).then(function(resp){
