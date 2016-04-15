@@ -29,14 +29,15 @@ var Request = function(bookshelf){
 		})
 		.fetchAll();
 	}
-	this.save = function(request_date, operator_title, operator_id, jurisdiction, jurisdiction_id){
+	this.save = function(request_date, operator_title, operator_id, jurisdiction, jurisdiction_id, language){
 		var request = new RequestModel({
 			'dateadded': timestamper.getTimestampPSQL(),
 			'request_date': timestamper.formatForPSQL(request_date),
 			'operator_title': operator_title, 
 			'operator_id': operator_id, 
 			'operator_jurisdiction': jurisdiction, 
-			'operator_jurisdiction_id': jurisdiction_id
+			'operator_jurisdiction_id': jurisdiction_id,
+			'language': language
 		})
 		.save();
 		return request;

@@ -37,7 +37,6 @@ var RequestContactVerifier = function(Subscription){
 		var token = requestContact.get('verification_token');
 		var verificationURL = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.emailVerification + "?token=" + token;
 		var unsubscribeURL = policy.unsubLink + "?email_address="+address;
-		console.log(request);
 
 		var language = request.get('language');
 		var jurisdiction = request.get('operator_jurisdiction_id');
