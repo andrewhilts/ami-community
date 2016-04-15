@@ -78,7 +78,7 @@ var RequestContactVerifier = function(Subscription){
 					reject(err);
 				})
 			});
-
+		});
 	}
 
 	this.getRequestContactByToken = function(token){
