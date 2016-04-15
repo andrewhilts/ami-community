@@ -43,7 +43,7 @@ var RequestContactVerifier = function(Subscription){
 		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
 
-		var templateDir = "../../emailTemplates/confirmation-"+language+"-"+jurisdiction;
+		var templateDir = "emailTemplates/confirmation-"+language+"-"+jurisdiction;
 		var confirmation = new EmailTemplate(templateDir);
 
 		switch(language){
