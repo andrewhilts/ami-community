@@ -12,7 +12,7 @@ var Email = function(){
 		"subject": "A message from Access My Info",
 		"from": "notifications@accessmyinfo.org",
 	}
-	this.send = function(params, template){
+	this.send = function(params){
 		var message = _.defaults(params, self.message);
 		return new Q.Promise(function(resolve,reject){
 			sendgrid.send(

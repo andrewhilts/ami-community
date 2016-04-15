@@ -5,6 +5,7 @@ var timestamper = require('../../shared/timestamper');
 var moment = require('moment');
 var Email = require('../../models/email').EmailModel;
 var Q = require('q');
+var EmailTemplate = require('email-templates').EmailTemplate;
 
 var RequestContactVerifier = function(Subscription){
 	var self = this;
@@ -36,29 +37,51 @@ var RequestContactVerifier = function(Subscription){
 		var token = requestContact.get('verification_token');
 		var verificationURL = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.emailVerification + "?token=" + token;
 		var unsubscribeURL = policy.unsubLink + "?email_address="+address;
-		
-		return email.send(
-			{
-				"to": address,
-				"subject": "Confirm your request: Access My Info",
-				"merge_vars": [{
-		            "rcpt": address,
-		            "vars": [
-		            	{
-		                    "name": "operator_title",
-		                    "content": operator_title
-		            	},
-		            	{
-		                    "name": "verificationURL",
-		                    "content": verificationURL
-		            	}
-		            ]
-		        }]
-			},
-			{
-				template_name: "signup-en",
-				template_content: []
+		console.log(request);
+
+		var language = 'en';
+		var jurisdiction = 33;
+		var subject; 
+
+		var templateDir = "../../emailTemplates/confirmation-"+language+"-"+jurisdiction;
+		var confirmation = new EmailTemplate(templateDir);
+
+		switch(language){
+			case "en":
+			subject = "Confirm your request: Access My Info"
+			break;
+			case "zh":
+			subject = "查閱資料要求確認：誰手可得"
+			break;
+		}
+		var params = {
+			operator_title: operator_title,
+			verificationURL: verificationURL,
+			unsubscribeURL: unsubscribeURL
+		}
+		confirmation.render(params, function(err, results){
+			if(err){
+				console.log(err);
+				return;
 			}
+
+			e.send({
+				to:address, 
+				subject: subject,
+				text: results.text,
+				html: results.html
+			})
+			.then(function(result){
+				console.log("sent", result);
+			})
+			.catch(function(err){
+				console.log("error", err);
+			});
+
+		});
+
+		return email.send(
+			
 		);
 	}
 
