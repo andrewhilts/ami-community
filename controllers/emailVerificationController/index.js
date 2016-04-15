@@ -35,6 +35,7 @@ var RequestContactVerifier = function(Subscription){
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
 		var token = requestContact.get('verification_token');
+		console.log(token);
 		var verificationURL = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.emailVerification + "?token=" + token;
 		var unsubscribeURL = policy.unsubLink + "?email_address="+address;
 
