@@ -40,7 +40,7 @@ var RequestContactVerifier = function(Subscription){
 		console.log(request);
 
 		var language = 'en';
-		var jurisdiction = 33;
+		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
 
 		var templateDir = "../../emailTemplates/confirmation-"+language+"-"+jurisdiction;
@@ -65,24 +65,13 @@ var RequestContactVerifier = function(Subscription){
 				return;
 			}
 
-			e.send({
+			return email.send({
 				to:address, 
 				subject: subject,
 				text: results.text,
 				html: results.html
-			})
-			.then(function(result){
-				console.log("sent", result);
-			})
-			.catch(function(err){
-				console.log("error", err);
 			});
-
 		});
-
-		return email.send(
-			
-		);
 	}
 
 	this.getRequestContactByToken = function(token){
