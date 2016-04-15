@@ -35,9 +35,11 @@ var RequestContactVerifier = function(Subscription){
 		var operator_title = request.get("operator_title");
 		var token = requestContact.get('verification_token');
 		var verificationURL = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.emailVerification + "?token=" + token;
+		var unsubscribeURL = policy.unsubLink + "?email_address="+address;
+		
 		return email.send(
 			{
-				"to": [{email: address}],
+				"to": address,
 				"subject": "Confirm your request: Access My Info",
 				"merge_vars": [{
 		            "rcpt": address,
