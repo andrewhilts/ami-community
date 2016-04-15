@@ -9,8 +9,8 @@ var Email = function(){
 	var self = this;
 	var unsubLink = policy.unsubLink
 	this.message = {
-		"subject": "A message from Access My Info",
-		"from": "notifications@accessmyinfo.org",
+		"subject": "A message from Access My Info Hong Kong",
+		"from": "info@accessmyinfo.hk",
 	}
 	this.send = function(params){
 		var message = _.defaults(params, self.message);

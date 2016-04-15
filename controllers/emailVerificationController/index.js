@@ -47,7 +47,7 @@ var RequestContactVerifier = function(Subscription){
 
 		switch(language){
 			case "en":
-			subject = "Confirm your request: Access My Info"
+			subject = "Confirm your request: Access My Info Hong Kong"
 			break;
 			case "zh":
 			subject = "查閱資料要求確認：誰手可得"
@@ -58,19 +58,27 @@ var RequestContactVerifier = function(Subscription){
 			verificationURL: verificationURL,
 			unsubscribeURL: unsubscribeURL
 		}
-		confirmation.render(params, function(err, results){
-			if(err){
-				console.log(err);
-				return;
-			}
+		return new Q.Promise(function(resolve,reject){
+			confirmation.render(params, function(err, results){
+				if(err){
+					console.log(err);
+					reject(err);
+				}
 
-			return email.send({
-				to:address, 
-				subject: subject,
-				text: results.text,
-				html: results.html
+				email.send({
+					to:address, 
+					subject: subject,
+					text: results.text,
+					html: results.html
+				})
+				.then(function(result){
+					resolve(result);
+				})
+				.catch(function(err){
+					reject(err);
+				})
 			});
-		});
+
 	}
 
 	this.getRequestContactByToken = function(token){
