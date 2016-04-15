@@ -43,8 +43,8 @@ var RequestContactVerifier = function(Subscription){
 		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
 
-		var templateDir = "emailTemplates/confirmation-"+language+"-"+jurisdiction;
-		var confirmation = new EmailTemplate(templateDir);
+		var templateDir = "emailTemplates/verification-"+language+"-"+jurisdiction;
+		var verificationTemplate = new EmailTemplate(templateDir);
 
 		switch(language){
 			case "en":
@@ -60,7 +60,7 @@ var RequestContactVerifier = function(Subscription){
 			unsubscribeURL: unsubscribeURL
 		}
 		return new Q.Promise(function(resolve,reject){
-			confirmation.render(params, function(err, results){
+			verificationTemplate.render(params, function(err, results){
 				if(err){
 					console.log(err);
 					reject(err);
