@@ -64,7 +64,7 @@ app.get('/verify', enrollmentController.verifyAndEnroll);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
-app.post('/pdf', pdfController.buildAndRespond)
+// app.post('/pdf', pdfController.buildAndRespond)
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
