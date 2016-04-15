@@ -44,7 +44,8 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				req.body.data.operator.title, 
 				req.body.data.operator.id, 
 				req.body.data.jurisdiction.title, 
-				req.body.data.jurisdiction.id
+				req.body.data.jurisdiction.id,
+				req.body.language
 			)
 			.then(function(savedRequest){
 				callback(null, savedRequest)
