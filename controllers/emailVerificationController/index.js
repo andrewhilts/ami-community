@@ -39,7 +39,7 @@ var RequestContactVerifier = function(Subscription){
 		var unsubscribeURL = policy.unsubLink + "?email_address="+address;
 		console.log(request);
 
-		var language = 'en';
+		var language = request.get('language');
 		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
 
