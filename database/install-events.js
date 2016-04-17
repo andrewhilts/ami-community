@@ -5,16 +5,22 @@ var async = require('async');
 var Event = require('../models/event').EventController(bookshelf);
 
 
-Install jurisdiction event profiles
+// Install jurisdiction event profiles
 var path = '../jurisdiction_events/';
-fs.readdir(path, function(err, files){
-	if(!err){
-		async.forEachOf(files, parseEventFile, function(err){
-			if(err) console.log(err);
-			console.log("hi");
-		});
-	}
-});
+// fs.readdir(path, function(err, files){
+// 	if(!err){
+// 		async.forEachOf(files, parseEventFile, function(err){
+// 			if(err) console.log(err);
+// 			console.log("hi");
+// 		});
+// 	}
+// });
+saveEventFile = function(fileName){
+	parseEventFile(filename, null,f unction(err){
+		if(err) console.log(err);
+		console.log("hi");
+	});
+}
 
 parseEventFile = function(value, key, callback){
 	if(fs.lstatSync(path + value).isFile()){
