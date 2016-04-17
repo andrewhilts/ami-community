@@ -5,7 +5,7 @@
 	operator_id int,
 	operator_jurisdiction VARCHAR(255),
 	operator_jurisdiction_id int,
-	language CHAR(2)
+	language CHAR(2),
 	dateadded timestamp
 );
 
