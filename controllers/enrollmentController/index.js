@@ -221,7 +221,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			var address = requestContact.get('email_address');
 			var operator_title = request.get("operator_title");
 
-			var unsubscribeURL = policy.unsubLink + "?email_address="+address;
+			var unsubscribeURL = email.makeUnsubLink(address);
 
 			var language = request.get('language');
 			var jurisdiction = request.get('operator_jurisdiction_id');

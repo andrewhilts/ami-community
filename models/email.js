@@ -27,6 +27,9 @@ var Email = function(){
 			});
 		});
 	}
+	this.makeUnsubLink = function(address){
+		return policy.unsubLink + "?email_address="+encodeURIComponent(address);
+	}
 }
 
 exports.EmailModel = Email;
