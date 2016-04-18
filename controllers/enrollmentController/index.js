@@ -1,6 +1,7 @@
 var async = require('async');
 var emailVerificationController = require('../emailVerificationController').emailVerificationController;
 var policy = require('../../conf/policy.conf').policy;
+var EmailTemplate = require('email-templates').EmailTemplate;
 
 var enrollmentController = function(Request, Subscription, Event, RequestEvent, Email){
 	this.submit = function(req, res) {
