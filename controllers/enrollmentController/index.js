@@ -205,6 +205,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				callback(null, request, requestContact);
 			})
 			.catch(function(error){
+				console.log(error);
 				callback({
 					"statusCode": "D1", 
 					"message": "Database Error."
