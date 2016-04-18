@@ -45,6 +45,7 @@ var RequestContactVerifier = function(Subscription){
 
 		var templateDir = "emailTemplates/verification-"+language+"-"+jurisdiction;
 		var verificationTemplate = new EmailTemplate(templateDir);
+		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
 
 		switch(language){
 			case "en":
@@ -57,7 +58,8 @@ var RequestContactVerifier = function(Subscription){
 		var params = {
 			operator_title: operator_title,
 			verificationURL: verificationURL,
-			unsubscribeURL: unsubscribeURL
+			unsubscribeURL: unsubscribeURL,
+			amiLogoPath: amiLogoPath
 		}
 		return new Q.Promise(function(resolve,reject){
 			verificationTemplate.render(params, function(err, results){

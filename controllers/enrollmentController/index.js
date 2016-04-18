@@ -226,6 +226,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			var language = request.get('language');
 			var jurisdiction = request.get('operator_jurisdiction_id');
 			var subject; 
+			var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
 
 			var templateDir = "emailTemplates/confirmation-"+language+"-"+jurisdiction;
 			var confirmationTemplate = new EmailTemplate(templateDir);
@@ -240,7 +241,8 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			}
 			var params = {
 				operator_title: operator_title,
-				unsubscribeURL: unsubscribeURL
+				unsubscribeURL: unsubscribeURL,
+				amiLogoPath: amiLogoPath
 			}
 			return new Q.Promise(function(resolve,reject){
 				confirmationTemplate.render(params, function(err, results){
