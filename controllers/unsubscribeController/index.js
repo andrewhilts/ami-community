@@ -15,7 +15,7 @@ var unsubscribeController = function(Subscription){
 
 	self.unsubHandler = function(req, res){
 		var email_address = req.body.email_address;
-		console.log(req.body);
+		console.log(email_address);
 		self.unsubscribe(email_address)
 		.then(function(model){
 			res.json({
@@ -29,6 +29,7 @@ var unsubscribeController = function(Subscription){
 			});
 		})
 		.catch(function(e){
+			console.log(e);
 			res.json({
 				"message": {
 					"statusCode": "U2",
