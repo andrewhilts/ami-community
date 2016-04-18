@@ -15,7 +15,7 @@ var path = '../jurisdiction_events/';
 // 		});
 // 	}
 // });
-saveEventFile = function(fileName){
+saveEventFile = function(filename){
 	parseEventFile(filename, null, function(err){
 		if(err) console.log(err);
 		console.log("hi");
