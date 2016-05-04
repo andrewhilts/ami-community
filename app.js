@@ -34,6 +34,15 @@ var pdfController = require('./controllers/pdfController/index.js').pdfControlle
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(require('express-domain-middleware'));
+app.use(function errorHandler(err, req, res, next) {
+  console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
+  res.send(500, "Something bad happened. :(");
+  if(err.domain) {
+    console.log(err); //Send some notification about the error
+	process.exit(1);
+  }
+});
 app.use(helmet());
 app.use(cors({
 	origin: policy.AMIFrontEnd.baseURL
@@ -63,8 +72,6 @@ app.get('/verify', enrollmentController.verifyAndEnroll);
 // app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
-
-// app.post('/pdf', pdfController.buildAndRespond)
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));

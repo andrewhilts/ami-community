@@ -27,7 +27,7 @@
     "q": "^1.4.1",
     "sendgrid": "^2.0.0",
     "sleep": "^3.0.0",
-    "wkhtmltopdf": "^0.1.5"
+    "express-domain-middleware": "^0.1.0"
   },
   "devDependencies": {},
   "scripts": {

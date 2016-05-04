@@ -37,6 +37,14 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 
 			requestEvents.models.forEach(function(model){
 				var dateString =  moment(model.get('request').get('request_date')).format('MMMM Do YYYY');
+				/*
+				@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				@@@											  @@
+				@@@             FIX FOR SENDGRID              @@
+				@@@	  Let's generate a token for each email   @@
+				@@@											  @@
+				@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				*/
 				params.to.push({
 					email: model.get('requestContact').get('email_address')
 				});
@@ -101,6 +109,13 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 
 	self.sendEmails = function(eventModel, emailParams){
 		var email = new Email();
+		/*
+		@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		@@@											  @@
+		@@@             FIX FOR SENDGRID              @@
+		@@@											  @@
+		@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		*/
 		return email.send(
 			{
 				"to": emailParams.to,

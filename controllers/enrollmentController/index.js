@@ -8,7 +8,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 	this.submit = function(req, res) {
 		var validateRequest = function(callback){
 			var consent = req.body.subscribe;
-			if(consent){
+			if(consent && req.body.data && req.body.data.operator){
 				Request.validateRequest(
 					req.body.data.operator.id,
 					req.body.email.address
