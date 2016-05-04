@@ -48,7 +48,7 @@ app.use(limiter);
 //     };
 // app.use(errorHandler);
 var myLogger = function (req, res, next) {
-  console.log('LOGGED');
+  console.log('LOGGED', next);
   next();
 };
 
