@@ -55,10 +55,8 @@ app.use(limiter);
 // 	});
 // })
 app.use(function(err, req, res, next) {
-  if (!err) return next();
-  console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
-  res.send(500, "Something bad happened. :(");
-  process.exit(1);
+  console.error(err.stack);
+  next(err);
 });
 
 // app.get('/enroll', enrollmentController.getForm);
