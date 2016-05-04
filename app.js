@@ -54,10 +54,6 @@ app.use(limiter);
 // 		title: 'Error: Form tampered with.'
 // 	});
 // })
-app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  next(err);
-});
 
 // app.get('/enroll', enrollmentController.getForm);
 app.post('/enroll', enrollmentController.submit);
@@ -66,6 +62,13 @@ app.get('/verify', enrollmentController.verifyAndEnroll);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
+app.use(function(err, req, res, next) {
+    if (req.xhr) {
+    res.status(500).send({ error: 'Something failed!' });
+  } else {
+    next(err);
+  }
+});
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
