@@ -23,8 +23,7 @@
     "node-uuid": "^1.4.7",
     "pg": "^4.4.3",
     "q": "^1.4.1",
-    "sleep": "^3.0.0",
-    "wkhtmltopdf": "^0.1.5"
+    "sleep": "^3.0.0"
   },
   "devDependencies": {},
   "scripts": {
