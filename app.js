@@ -54,6 +54,12 @@ app.use(limiter);
 // 		title: 'Error: Form tampered with.'
 // 	});
 // })
+app.use(function(err, req, res, next) {
+  if (!err) return next();
+  console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
+  res.send(500, "Something bad happened. :(");
+  process.exit(1);
+});
 
 // app.get('/enroll', enrollmentController.getForm);
 app.post('/enroll', enrollmentController.submit);
@@ -62,12 +68,6 @@ app.get('/verify', enrollmentController.verifyAndEnroll);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
-app.use(function(err, req, res, next) {
-  if (!err) return next();
-  console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
-  res.send(500, "Something bad happened. :(");
-  process.exit(1);
-});
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
