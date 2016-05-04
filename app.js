@@ -46,6 +46,7 @@ function errorHandler(err,req,res,next) {
   res.send(500, "Something bad happened. :(");
   process.exit(1);		
     };
+app.use(errorHandler);
 
 // app.use(function (err, req, res, next) {
 // 	console.log(req.session);
@@ -60,11 +61,11 @@ function errorHandler(err,req,res,next) {
 // })
 
 // app.get('/enroll', enrollmentController.getForm);
-app.post('/enroll', enrollmentController.submit,errorHandler);
-app.get('/verify', enrollmentController.verifyAndEnroll,errorHandler);
+app.post('/enroll', enrollmentController.submit);
+app.get('/verify', enrollmentController.verifyAndEnroll);
 // app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', feedbackController.submit,errorHandler);
-app.post('/unsubscribe', unsubscribeController.unsubHandler,errorHandler);
+app.post('/feedback', feedbackController.submit);
+app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
 // app.use(function(err, req, res, next) {
 //     if (req.xhr) {
