@@ -40,9 +40,9 @@ app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
 app.use(helmet());
-app.use(cors({
-	origin: policy.AMIFrontEnd.baseURL
-}));
+// app.use(cors({
+// 	origin: policy.AMIFrontEnd.baseURL
+// }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(limiter);
