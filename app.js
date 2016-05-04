@@ -47,8 +47,8 @@ app.use(limiter);
 //   process.exit(1);		
 //     };
 // app.use(errorHandler);
-var myLogger = function (req, res, next) {
-  console.log('LOGGED', next);
+var myLogger = function (err, req, res, next) {
+  console.log('LOGGED');
   next();
 };
 
