@@ -32,7 +32,6 @@ var unsubscribeController = require('./controllers/unsubscribeController/index.j
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 app.set('port', process.env.PORT || 3000);
-app.use(express.errorHandler());
 app.use(function errorHandler(err, req, res, next) {
   if (!err) return next();
   console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
