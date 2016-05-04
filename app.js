@@ -41,12 +41,19 @@ app.use(bodyParser.json());
 app.use(limiter);
 // app.use(cookieParser({''}));
 // app.use(csrf());
-function errorHandler(err,req,res,next) {
-        console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
-  res.send(500, "Something bad happened. :(");
-  process.exit(1);		
-    };
-app.use(errorHandler);
+// function errorHandler(err,req,res,next) {
+//         console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
+//   res.send(500, "Something bad happened. :(");
+//   process.exit(1);		
+//     };
+// app.use(errorHandler);
+var myLogger = function (req, res, next) {
+  console.log('LOGGED');
+  next();
+};
+
+app.use(myLogger);
+
 
 // app.use(function (err, req, res, next) {
 // 	console.log(req.session);
@@ -66,14 +73,6 @@ app.get('/verify', enrollmentController.verifyAndEnroll);
 // app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
-
-// app.use(function(err, req, res, next) {
-//     if (req.xhr) {
-//     res.status(500).send({ error: 'Something failed!' });
-//   } else {
-//     next(err);
-//   }
-// });
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
