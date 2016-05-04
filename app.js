@@ -32,12 +32,6 @@ var unsubscribeController = require('./controllers/unsubscribeController/index.j
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 app.set('port', process.env.PORT || 3000);
-app.use(function errorHandler(err, req, res, next) {
-  if (!err) return next();
-  console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
-  res.send(500, "Something bad happened. :(");
-  process.exit(1);
-});
 app.use(helmet());
 app.use(cors({
 	origin: policy.AMIFrontEnd.baseURL
@@ -68,6 +62,12 @@ app.get('/verify', enrollmentController.verifyAndEnroll);
 app.post('/feedback', feedbackController.submit);
 app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
+app.use(function(err, req, res, next) {
+  if (!err) return next();
+  console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
+  res.send(500, "Something bad happened. :(");
+  process.exit(1);
+});
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
