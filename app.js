@@ -29,7 +29,6 @@ var limiter = rateLimit({
 var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController(Feedback);
 var unsubscribeController = require('./controllers/unsubscribeController/index.js').unsubscribeController(Subscription);
-var pdfController = require('./controllers/pdfController/index.js').pdfController();
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 app.set('port', process.env.PORT || 3000);
