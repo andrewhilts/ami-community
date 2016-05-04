@@ -55,8 +55,9 @@ app.use(limiter);
 //     };
 // app.use(errorHandler);
 var myLogger = function (err, req, res, next) {
-  console.log('error on request %s %s: %j', req.method, req.url, err);
-  res.send(500, "Something bad happened. :(");
+	console.log(arguments);
+  console.log('error on request %d %s %s: %j', req.method, req.url, err);
+  res.status(500).send("Something bad happened. :(");
   process.exit(1);
 };
 
