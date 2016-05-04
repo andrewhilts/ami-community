@@ -29,10 +29,15 @@ var limiter = rateLimit({
 var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController(Feedback);
 var unsubscribeController = require('./controllers/unsubscribeController/index.js').unsubscribeController(Subscription);
-var pdfController = require('./controllers/pdfController/index.js').pdfController();
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 app.set('port', process.env.PORT || 3000);
+
+app.post('/enroll', enrollmentController.submit);
+app.get('/verify', enrollmentController.verifyAndEnroll);
+// app.get('/feedback', feedbackController.getForm);
+app.post('/feedback', feedbackController.submit);
+app.post('/unsubscribe', unsubscribeController.unsubHandler);
 
 app.use(helmet());
 app.use(cors({
@@ -44,27 +49,13 @@ app.use(limiter);
 // app.use(cookieParser({''}));
 // app.use(csrf());
 
+var myLogger = function (err, req, res, next) {
+  console.log('error on request %s %s: %s', req.method, req.url, err);
+  res.status(500).send("Something bad happened. :(");
+  process.exit(1);
+};
 
-// app.use(function (err, req, res, next) {
-// 	console.log(req.session);
-// 	console.log(req.body._csrf);
-//   if (err.code !== 'EBADCSRFTOKEN') return next(err)
-
-//   // handle CSRF token errors here
-// 	res.status(403)
-// 	res.json({
-// 		title: 'Error: Form tampered with.'
-// 	});
-// })
-
-// app.get('/enroll', enrollmentController.getForm);
-app.post('/enroll', enrollmentController.submit);
-app.get('/verify', enrollmentController.verifyAndEnroll);
-// app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', feedbackController.submit);
-app.post('/unsubscribe', unsubscribeController.unsubHandler);
-
-// app.post('/pdf', pdfController.buildAndRespond)
+app.use(myLogger);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
