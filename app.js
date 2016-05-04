@@ -55,8 +55,9 @@ app.use(limiter);
 //     };
 // app.use(errorHandler);
 var myLogger = function (err, req, res, next) {
-  console.log('LOGGED');
-  next();
+  console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
+  res.send(500, "Something bad happened. :(");
+  process.exit(1);
 };
 
 app.use(myLogger);
