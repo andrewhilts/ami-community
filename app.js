@@ -41,11 +41,11 @@ app.use(bodyParser.json());
 app.use(limiter);
 // app.use(cookieParser({''}));
 // app.use(csrf());
-app.use(function(err,req,res,next) {
+function errorHandler(err,req,res,next) {
         console.log('error on request %d %s %s: %j', process.domain.id, req.method, req.url, err);
   res.send(500, "Something bad happened. :(");
   process.exit(1);		
-    });
+    };
 
 // app.use(function (err, req, res, next) {
 // 	console.log(req.session);
@@ -60,11 +60,11 @@ app.use(function(err,req,res,next) {
 // })
 
 // app.get('/enroll', enrollmentController.getForm);
-app.post('/enroll', enrollmentController.submit);
-app.get('/verify', enrollmentController.verifyAndEnroll);
+app.post('/enroll', enrollmentController.submit,errorHandler);
+app.get('/verify', enrollmentController.verifyAndEnroll,errorHandler);
 // app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', feedbackController.submit);
-app.post('/unsubscribe', unsubscribeController.unsubHandler);
+app.post('/feedback', feedbackController.submit,errorHandler);
+app.post('/unsubscribe', unsubscribeController.unsubHandler,errorHandler);
 
 // app.use(function(err, req, res, next) {
 //     if (req.xhr) {
