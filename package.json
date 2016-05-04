@@ -26,8 +26,7 @@
     "pg": "^4.4.3",
     "q": "^1.4.1",
     "sendgrid": "^2.0.0",
-    "sleep": "^3.0.0",
-    "express-domain-middleware": "^0.1.0"
+    "sleep": "^3.0.0"
   },
   "devDependencies": {},
   "scripts": {
