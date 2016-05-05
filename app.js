@@ -51,11 +51,11 @@ var myErrorLogger = function (err, req, res, next) {
   process.exit(1);
 };
 
-app.post('/enroll', myErrorLogger, enrollmentController.submit);
-app.get('/verify', myErrorLogger, enrollmentController.verifyAndEnroll);
+app.post('/enroll', enrollmentController.submit, myErrorLogger);
+app.get('/verify', enrollmentController.verifyAndEnroll, myErrorLogger);
 // app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', myErrorLogger, feedbackController.submit);
-app.post('/unsubscribe', myErrorLogger, unsubscribeController.unsubHandler);
+app.post('/feedback', feedbackController.submit, myErrorLogger);
+app.post('/unsubscribe', unsubscribeController.unsubHandler, myErrorLogger);
 
 // app.use(cookieParser({''}));
 // app.use(csrf());
