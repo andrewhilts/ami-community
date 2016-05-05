@@ -17,7 +17,6 @@ var policy = require('./conf/policy.conf').policy;
 var uuid = require('node-uuid');
 
 var app = express();
-var router = express.Router();
 
 var limiter = rateLimit({
 	windowMS: 60000,
@@ -45,11 +44,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(limiter);
 
-router.post('/enroll', enrollmentController.submit);
-router.get('/verify', enrollmentController.verifyAndEnroll);
+app.post('/enroll', enrollmentController.submit);
+app.get('/verify', enrollmentController.verifyAndEnroll);
 // app.get('/feedback', feedbackController.getForm);
-router.post('/feedback', feedbackController.submit);
-router.post('/unsubscribe', unsubscribeController.unsubHandler);
+app.post('/feedback', feedbackController.submit);
+app.post('/unsubscribe', unsubscribeController.unsubHandler);
 // app.use(cookieParser({''}));
 // app.use(csrf());
 
@@ -60,7 +59,7 @@ var myErrorLogger = function (err, req, res, next) {
   process.exit(1);
 };
 
-app.use(myErrorLogger);
+app.all('*', myErrorLogger);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
