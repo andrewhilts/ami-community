@@ -17,6 +17,7 @@ var policy = require('./conf/policy.conf').policy;
 var uuid = require('node-uuid');
 
 var app = express();
+var router = express.Router();
 
 var limiter = rateLimit({
 	windowMS: 60000,
@@ -59,7 +60,7 @@ var myErrorLogger = function (err, req, res, next) {
   process.exit(1);
 };
 
-app.all('*', myErrorLogger);
+app.use(myErrorLogger);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
