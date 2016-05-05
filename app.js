@@ -18,7 +18,6 @@ var uuid = require('node-uuid');
 var domain = require('domain');
 
 var app = express();
-var router = express.Router();
 
 function domainWrapper() {
     return function (req, res, next) {
