@@ -37,6 +37,11 @@ var unsubscribeController = require('./controllers/unsubscribeController/index.j
 app.set('port', process.env.PORT || 3000);
 
 
+app.post('/enroll', enrollmentController.submit);
+app.get('/verify', enrollmentController.verifyAndEnroll);
+// app.get('/feedback', feedbackController.getForm);
+app.post('/feedback', feedbackController.submit);
+app.post('/unsubscribe', unsubscribeController.unsubHandler);
 app.use(helmet());
 // app.use(cors({
 // 	origin: policy.AMIFrontEnd.baseURL
@@ -45,11 +50,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(limiter);
 
-app.post('/enroll', enrollmentController.submit);
-app.get('/verify', enrollmentController.verifyAndEnroll);
-// app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', feedbackController.submit);
-app.post('/unsubscribe', unsubscribeController.unsubHandler);
 // app.use(cookieParser({''}));
 // app.use(csrf());
 
