@@ -29,9 +29,7 @@ function domainWrapper() {
         res.on('close', function () {
             reqDomain.dispose();
         });
-        reqDomain.on('error', function (err) {
-            next(err);            
-        });
+        reqDomain.on('error', myErrorLogger);
         reqDomain.run(next)
     }
 }
