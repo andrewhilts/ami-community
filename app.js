@@ -56,11 +56,6 @@ app.get('/verify', myErrorLogger, enrollmentController.verifyAndEnroll);
 // app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', myErrorLogger, feedbackController.submit);
 app.post('/unsubscribe', myErrorLogger, unsubscribeController.unsubHandler);
-app.all("*", myErrorLogger, function (req, res, next) {
-  res.statusCode = 404;
-  res.send('404');
-  // Send a 404 page to the client here.
-});
 
 // app.use(cookieParser({''}));
 // app.use(csrf());
