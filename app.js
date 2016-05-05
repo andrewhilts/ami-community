@@ -15,9 +15,27 @@ var Email = require('./models/email.js').EmailModel;
 var Feedback = require('./models/feedback.js').FeedbackModel(bookshelf);
 var policy = require('./conf/policy.conf').policy;
 var uuid = require('node-uuid');
+var domain = require('domain');
 
 var app = express();
 var router = express.Router();
+
+function domainWrapper() {
+    return function (req, res, next) {
+        var reqDomain = domain.create();
+        reqDomain.add(req);
+        reqDomain.add(res);
+
+        res.on('close', function () {
+            reqDomain.dispose();
+        });
+        reqDomain.on('error', function (err) {
+            next(err);            
+        });
+        reqDomain.run(next)
+    }
+}
+app.use(domainWrapper());
 
 var limiter = rateLimit({
 	windowMS: 60000,
@@ -45,11 +63,10 @@ app.use(bodyParser.json());
 app.use(limiter);
 
 var myErrorLogger = function (err, req, res, next) {
-  // console.log('error on request %s %s: %s', req.method, req.url, err);
-  // res.status(500).send("Something bad happened. :(");
-  // res.end();
-  // process.exit(1);
-  next();
+  console.log('error on request %s %s: %s', req.method, req.url, err);
+  res.status(500).send("Something bad happened. :(");
+  res.end();
+  process.exit(1);
 };
 
 app.post('/enroll', enrollmentController.submit, myErrorLogger);
