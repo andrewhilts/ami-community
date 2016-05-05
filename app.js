@@ -34,7 +34,7 @@ function domainWrapper() {
   res.status(500).send("Something bad happened. :(");
   res.end();
   process.exit(1);
-};);
+});
         reqDomain.run(next)
     }
 }
