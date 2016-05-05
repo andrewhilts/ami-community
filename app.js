@@ -61,7 +61,7 @@ app.use(bodyParser.json());
 app.use(limiter);
 
 var myErrorLogger = function (err, req, res, next) {
-  console.log('error on request %s %s: %s', req.method, req.url, err);
+  console.log('error on request %s', err);
   res.status(500).send("Something bad happened. :(");
   res.end();
   process.exit(1);
