@@ -29,7 +29,12 @@ function domainWrapper() {
         res.on('close', function () {
             reqDomain.dispose();
         });
-        reqDomain.on('error', myErrorLogger);
+        reqDomain.on('error', function (err, request, response, next) {
+  console.log('error on request %s %s: %s', req.method, req.url, err);
+  res.status(500).send("Something bad happened. :(");
+  res.end();
+  process.exit(1);
+};);
         reqDomain.run(next)
     }
 }
@@ -61,7 +66,7 @@ app.use(bodyParser.json());
 app.use(limiter);
 
 var myErrorLogger = function (err, req, res, next) {
-  console.log('error on request %s', err);
+  console.log('error on request %s %s: %s', req.method, req.url, err);
   res.status(500).send("Something bad happened. :(");
   res.end();
   process.exit(1);
