@@ -33,11 +33,11 @@ var unsubscribeController = require('./controllers/unsubscribeController/index.j
 
 app.set('port', process.env.PORT || 3000);
 
-app.post('/enroll', bodyParser.urlencoded({ extended: true }).json(), helmet(), limiter, enrollmentController.submit);
-app.get('/verify', bodyParser.urlencoded({ extended: true }).json(), helmet(), limiter, enrollmentController.verifyAndEnroll);
+app.post('/enroll', bodyParser.urlencoded({ extended: true }).json, helmet, limiter, enrollmentController.submit);
+app.get('/verify', bodyParser.urlencoded({ extended: true }).json, helmet, limiter, enrollmentController.verifyAndEnroll);
 // app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', bodyParser.urlencoded({ extended: true }).json(), helmet(), limiter, feedbackController.submit);
-app.post('/unsubscribe', bodyParser.urlencoded({ extended: true }).json(), helmet(), limiter, unsubscribeController.unsubHandler);
+app.post('/feedback', bodyParser.urlencoded({ extended: true }).json, helmet, limiter, feedbackController.submit);
+app.post('/unsubscribe', bodyParser.urlencoded({ extended: true }).json, helmet, limiter, unsubscribeController.unsubHandler);
 
 var myLogger = function (err, req, res, next) {
   console.log('error on request %s %s: %s', req.method, req.url, err);
