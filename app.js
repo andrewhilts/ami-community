@@ -36,12 +36,6 @@ var unsubscribeController = require('./controllers/unsubscribeController/index.j
 
 app.set('port', process.env.PORT || 3000);
 
-
-app.post('/enroll', enrollmentController.submit);
-app.get('/verify', enrollmentController.verifyAndEnroll);
-// app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', feedbackController.submit);
-app.post('/unsubscribe', unsubscribeController.unsubHandler);
 app.use(helmet());
 // app.use(cors({
 // 	origin: policy.AMIFrontEnd.baseURL
@@ -50,9 +44,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(limiter);
 
-// app.use(cookieParser({''}));
-// app.use(csrf());
-
 var myErrorLogger = function (err, req, res, next) {
   console.log('error on request %s %s: %s', req.method, req.url, err);
   res.status(500).send("Something bad happened. :(");
@@ -60,7 +51,20 @@ var myErrorLogger = function (err, req, res, next) {
   process.exit(1);
 };
 
-app.use(myErrorLogger);
+app.post('/enroll', myErrorLogger, enrollmentController.submit);
+app.get('/verify', myErrorLogger, enrollmentController.verifyAndEnroll);
+// app.get('/feedback', feedbackController.getForm);
+app.post('/feedback', myErrorLogger, feedbackController.submit);
+app.post('/unsubscribe', myErrorLogger, unsubscribeController.unsubHandler);
+app.all("*", myErrorLogger, function (req, res, next) {
+  res.statusCode = 404;
+  res.send('404');
+  // Send a 404 page to the client here.
+});
+
+// app.use(cookieParser({''}));
+// app.use(csrf());
+
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
