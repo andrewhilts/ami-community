@@ -30,11 +30,11 @@ function domainWrapper() {
             reqDomain.dispose();
         });
         reqDomain.on('error', function (err, request, response, next) {
-  console.log('error on request %s %s: %s', req.method, req.url, err);
-  res.status(500).send("Something bad happened. :(");
-  res.end();
-  process.exit(1);
-});
+		  console.log('error on request %s %s: %s', req.method, req.url, err);
+		  res.status(500).send("Something bad happened. :(");
+		  res.end();
+		  process.exit(1);
+		});
         reqDomain.run(next)
     }
 }
