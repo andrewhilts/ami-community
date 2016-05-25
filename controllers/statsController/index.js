@@ -8,7 +8,8 @@ var statsController = function(Request){
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
-		.count();
+		.count()
+		.toJSON();
 	}
 	self.getVerified = function(jurisdiction_id){
 		return new Request.RequestCollection()
@@ -16,7 +17,8 @@ var statsController = function(Request){
 			qb.innerJoin('request_contacts', 'requests.request_id', 'request_contacts.request_id');
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
-		.count();
+		.count()
+		.toJSON();
 	}
 	self.getByCompany = function(jurisdiction_id){
 		return new Request.RequestCollection()
@@ -24,7 +26,8 @@ var statsController = function(Request){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
 		})
-		.count();
+		.count()
+		.toJSON();
 	}
 	self.getByDate = function(jurisdiction_id){
 		return new Request.RequestCollection()
@@ -32,7 +35,8 @@ var statsController = function(Request){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
 		})
-		.count();
+		.count()
+		.toJSON();
 	}
 	this.methodAllocator = function(req, res){
 		var method = req.params.method;
@@ -62,7 +66,7 @@ var statsController = function(Request){
 		}
 		jsonPromise
 		.then(function(data){
-			res.json(data.toJSON());
+			res.json(data);
 		})
 		.catch(function(err){
 			throw new Error(err);
