@@ -107,7 +107,7 @@ var statsController = function(Request){
 			var finalData = {};
 			var dateData = _.find(formattedDateRange, {"request_date": dateStr})
 			if(dateData){
-				finalData.request_date = dateData.requestData;
+				finalData.request_date = dateData.request_date;
 				finalData.count = dateData.count;
 			}
 			else{
