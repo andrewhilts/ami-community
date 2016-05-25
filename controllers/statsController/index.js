@@ -75,6 +75,7 @@ var statsController = function(Request){
 			qb.groupBy('operator_id');
 			qb.orderBy('request_date');
 		})
+		.fetch();
 		return new Q.Promise(function(resolve,reject){
 			dates.then(function(requests){
 				operatorTotals = requests.countBy("request_date");
