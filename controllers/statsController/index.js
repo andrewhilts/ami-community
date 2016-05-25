@@ -88,11 +88,14 @@ var statsController = function(Request){
 	}
 	self.formatDates = function(dateRange){
 		var dates = Object.keys(dateRange);
+		var formattedDateRange = [];
 		for(var i=0; i < dates.length; i++){
-			console.log(dates[i], dateRange[dates[i]]);
-			// dateRange[i][0] = moment.utc(dateRange[i][0]).format('YYYY-MM-DD')
+			formattedDateRange.push({
+				"request_date": moment.utc(dates[i]).format('YYYY-MM-DD'),
+				"count": dateRange[dates[i]]
+			})
 		}
-		return dateRange;
+		return formattedDateRange;
 	}
 	self.methodAllocator = function(req, res){
 		var method = req.params.method;
