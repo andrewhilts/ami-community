@@ -51,7 +51,7 @@ var limiter = rateLimit({
 var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController(Feedback);
 var unsubscribeController = require('./controllers/unsubscribeController/index.js').unsubscribeController(Subscription);
-var statsController = require('./controllers/statsController/index.js').statsController(Request);
+var statsController = require('./controllers/statsController/index.js').statsController(RequestCollection);
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 

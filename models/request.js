@@ -15,6 +15,7 @@ var Request = function(bookshelf){
 		'idAttribute': 'request_contact_id'
 	});
 	this.RequestModel = RequestModel;
+	this.RequestCollection = RequestCollection;
 	this.RequestContact = RequestContact;
 	this.validateRequest = function(operator_id, email_address){
 		// Get history of requests for email

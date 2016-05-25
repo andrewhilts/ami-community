@@ -1,7 +1,7 @@
 var async = require('async');
 var Q = require('q');
 
-var statsController = function(Request){
+var statsController = function(RequestCollection){
 	var self = this;
 	self.getTotal = function(jurisdiction_id){
 		return new RequestCollection()
