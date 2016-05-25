@@ -33,7 +33,7 @@ var statsController = function(Request){
 		})
 		.count();
 	}
-	this.methodAllocator = function(res, req){
+	this.methodAllocator = function(req, res){
 		var method = req.params.method;
 		var jurisdiction = parseInt(req.params.jurisdiction);
 		if(isNaN(jurisdiction)){
