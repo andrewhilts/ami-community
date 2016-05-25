@@ -43,9 +43,10 @@ var statsController = function(Request){
 		fetch()
 		.then(function(collection){
 			return new Q.Promise(function(resolve,reject){
-				groupedEvents = events.countBy("operator_id");
-				if(Object.keys(groupedEvents).length){
-					resolve(groupedEvents);
+				groupedRequests = Requests.countBy("operator_id");
+				if(Object.keys(groupedRequests).length){
+					console.log(groupedRequests);
+					resolve(groupedRequests);
 				}
 				else{
 					reject("No events");
