@@ -5,10 +5,7 @@ var Request = function(bookshelf){
 	var self = this;
 	var RequestModel = bookshelf.Model.extend({
 		'tableName': 'requests',
-		'idAttribute': 'request_id',
-		parse: function(attrs){
-			// attrs.request_date = moment(attrs.request_date, "YYYY-MM-DD HH:mm:ssZZ").format('YYYY-MM-DD')
-		}
+		'idAttribute': 'request_id'
 	});
 	var RequestCollection = bookshelf.Collection.extend({
 		'model': RequestModel
