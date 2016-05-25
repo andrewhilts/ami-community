@@ -48,7 +48,7 @@ var statsController = function(Request){
 				var sortedOperatorTotals = []
 				for (var operator in operatorTotals)
 				      sortable.push([operator, operatorTotals[operator]])
-				sortable.sort(function(a, b) {return a[1] - b[1]}).reverse();
+				sortable.sort(function(a, b) {return a[1] - b[1]})
 				
 				for (var i=0; i < sortable.length; i++){
 					sortedOperatorTotals.push({
@@ -73,8 +73,22 @@ var statsController = function(Request){
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
+			qb.orderBy('request_date');
 		})
-		.fetch();
+		return new Q.Promise(function(resolve,reject){
+			companies.then(function(requests){
+				operatorTotals = requests.countBy("request_date");
+				if(Object.keys(operatorTotals).length){
+					resolve(operatorTotals);
+				}
+				else{
+					reject("No events");
+				}
+			})
+			.catch(function(err){
+				reject("err");
+			})
+		});
 	}
 	this.methodAllocator = function(req, res){
 		var method = req.params.method;
