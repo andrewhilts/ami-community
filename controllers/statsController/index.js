@@ -40,7 +40,7 @@ var statsController = function(Request){
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
-		fetch()
+		.fetch()
 		return new Q.Promise(function(resolve,reject){
 			companies.then(function(requests){
 				groupedRequests = requests.countBy("operator_id");
