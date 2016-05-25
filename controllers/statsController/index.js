@@ -2,6 +2,7 @@ var async = require('async');
 var Q = require('q');
 var _ = require('lodash');
 var moment = require('moment');
+require('moment-range');
 
 var statsController = function(Request){
 	var self = this;
@@ -90,13 +91,31 @@ var statsController = function(Request){
 	self.formatDates = function(dateRange){
 		var dates = Object.keys(dateRange);
 		var formattedDateRange = [];
+		var startDate, endDate, momentRange, finalRange;
+		finalRange = [];
 		for(var i=0; i < dates.length; i++){
 			formattedDateRange.push({
 				"request_date": moment.utc(dates[i], "ddd MMM DD YYYY").format('YYYY-MM-DD'),
 				"count": dateRange[dates[i]]
 			})
 		}
-		return formattedDateRange;
+		startDate = moment(formattedDateRange[0].request_date, 'YYYY-MM-DD');
+		endDate = moment(formattedDateRange[formattedDateRange.length-1].request_date, 'YYYY-MM-DD');
+		momentRange = moment.range(dates);
+		momentRange.by('days', function(moment){
+			dateStr - moment.format('YYYY-MM-DD');
+			var finalData = {};
+			var dateData = _.find(formattedDateRange, {"request_date": dateStr})
+			if(dateData){
+				finalData.request_date = dateData.requestData;
+				finalData.count = dateData.count;
+			}
+			else{
+				finalData.request_date = dateStr;
+				finalData.count = 0;
+			}
+		});
+		return finalData;
 	}
 	self.methodAllocator = function(req, res){
 		var method = req.params.method;
