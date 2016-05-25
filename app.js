@@ -51,6 +51,7 @@ var limiter = rateLimit({
 var enrollmentController = require('./controllers/enrollmentController/index.js').enrollmentController(Request, Subscription, Event, RequestEvent, Email);
 var feedbackController = require('./controllers/feedbackController/index.js').feedbackController(Feedback);
 var unsubscribeController = require('./controllers/unsubscribeController/index.js').unsubscribeController(Subscription);
+var statsController = require('./controllers/statsController/index.js').statsController(Request);
 // var parseForm = bodyParser.urlencoded({ extended: false })
 
 
@@ -76,6 +77,7 @@ app.get('/verify', enrollmentController.verifyAndEnroll, myErrorLogger);
 // app.get('/feedback', feedbackController.getForm);
 app.post('/feedback', feedbackController.submit, myErrorLogger);
 app.post('/unsubscribe', unsubscribeController.unsubHandler, myErrorLogger);
+app.get('/stats/:method/:jurisdiction', statsController.methodAllocator, myErrorLogger);
 app.all("*", myErrorLogger);
 // app.use(cookieParser({''}));
 // app.use(csrf());
