@@ -43,13 +43,13 @@ var statsController = function(Request){
 		.fetch()
 		return new Q.Promise(function(resolve,reject){
 			companies.then(function(requests){
-				groupedRequests = requests.countBy("operator_id");
-				var sortable = [];
-				for (var operator in groupedRequests)
-				      sortable.push([operator, groupedRequests[operator]])
-				sortable.sort(function(a, b) {return a[1] - b[1]})
-				if(Object.keys(sortable).length){
-					resolve(sortable);
+				operatorTotals = requests.countBy("operator_id");
+				var sortedOperatorTotals = [];
+				for (var operator in operatorTotals)
+				      sortedOperatorTotals.push({"operator_id": operator, "count": operatorTotals[operator]});
+				sortedOperatorTotals.sort(function(a, b) {return a[1] - b[1]})
+				if(Object.keys(sortedOperatorTotals).length){
+					resolve(sortedOperatorTotals);
 				}
 				else{
 					reject("No events");
