@@ -22,9 +22,7 @@ var statsController = function(Request){
 		return new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
-			qb.groupBy('operator_id');
 		})
-		.count();
 	}
 	self.getByDate = function(jurisdiction_id){
 		return new Request.RequestCollection()
@@ -32,7 +30,6 @@ var statsController = function(Request){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
 		})
-		.count();
 	}
 	this.methodAllocator = function(req, res){
 		var method = req.params.method;
