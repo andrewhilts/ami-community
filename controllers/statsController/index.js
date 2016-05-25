@@ -45,12 +45,19 @@ var statsController = function(Request){
 			companies.then(function(requests){
 				operatorTotals = requests.countBy("operator_id");
 				var sortable = [];
+				var sortedOperatorTotals = []
 				for (var operator in operatorTotals)
 				      sortable.push([operator, operatorTotals[operator]])
 				sortable.sort(function(a, b) {return a[1] - b[1]})
 				
-				if(Object.keys(sortable).length){
-					resolve(sortable);
+				for (var item in sortable){
+					sortedOperatorTotals.push({
+						"operator_id": item[0],
+						"total": item[1]
+					})
+				}
+				if(Object.keys(sortedOperatorTotals).length){
+					resolve(sortedOperatorTotals);
 				}
 				else{
 					reject("No events");
