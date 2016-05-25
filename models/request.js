@@ -5,7 +5,7 @@ var Request = function(bookshelf){
 	var self = this;
 	var RequestModel = bookshelf.Model.extend({
 		'tableName': 'requests',
-		'idAttribute': 'request_id'
+		'idAttribute': 'request_id',
 		parse: function(attrs){
 			attrs.request_date = attrs.request_date.format('YYYY-MM-DD')
 		}
