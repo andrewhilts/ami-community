@@ -79,12 +79,7 @@ var statsController = function(Request){
 		return new Q.Promise(function(resolve,reject){
 			dates.then(function(requests){
 				operatorTotals = requests.countBy("request_date");
-				if(Object.keys(operatorTotals).length){
-					resolve(operatorTotals);
-				}
-				else{
-					reject("No events");
-				}
+				resolve(operatorTotals);
 			})
 			.catch(function(err){
 				reject("err");
