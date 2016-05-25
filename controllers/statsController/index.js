@@ -88,6 +88,7 @@ var statsController = function(Request){
 	}
 	self.formatDates = function(dateRange){
 		for(var i=0; i < dateRange.length; i++){
+			console.log(dateRange[i]);
 			dateRange[i][0] = moment.utc(dateRange[i][0]).format('YYYY-MM-DD')
 		}
 		return dateRange;
