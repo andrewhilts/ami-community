@@ -50,14 +50,14 @@ var statsController = function(Request){
 				      sortable.push([operator, operatorTotals[operator]])
 				sortable.sort(function(a, b) {return a[1] - b[1]})
 				
-				for (var item in sortable){
-					sortedOperatorTotals.push({
-						"operator_id": item[0],
-						"total": item[1]
-					})
-				}
-				if(Object.keys(sortedOperatorTotals).length){
-					resolve(sortedOperatorTotals);
+				// for (var item in sortable){
+				// 	sortedOperatorTotals.push({
+				// 		"operator_id": item[0][1],
+				// 		"total": item[1]
+				// 	})
+				// }
+				if(Object.keys(sortable).length){
+					resolve(sortable);
 				}
 				else{
 					reject("No events");
