@@ -48,7 +48,7 @@ var statsController = function(Request){
 				var sortedOperatorTotals = []
 				for (var operator in operatorTotals)
 				      sortable.push([operator, operatorTotals[operator]])
-				sortable.sort(function(a, b) {return a[1] - b[1]})
+				sortable.sort(function(a, b) {return a[1] - b[1]}).reverse();
 				
 				for (var i=0; i < sortable.length; i++){
 					sortedOperatorTotals.push({
