@@ -36,14 +36,14 @@ var statsController = function(Request){
 		});
 	}
 	self.getByCompany = function(jurisdiction_id){
-		return new Request.RequestCollection()
+		var companies = new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
 		fetch()
-		.then(function(collection){
-			return new Q.Promise(function(resolve,reject){
-				groupedRequests = Requests.countBy("operator_id");
+		return new Q.Promise(function(resolve,reject){
+			companies.then(function(requests){
+				groupedRequests = requests.countBy("operator_id");
 				if(Object.keys(groupedRequests).length){
 					console.log("!!", groupedRequests);
 					resolve(groupedRequests);
@@ -51,8 +51,11 @@ var statsController = function(Request){
 				else{
 					reject("No events");
 				}
-			});
-		})
+			})
+			.catch(function(err){
+				reject("err");
+			})
+		});
 	}
 	self.getByDate = function(jurisdiction_id){
 		return new Request.RequestCollection()
