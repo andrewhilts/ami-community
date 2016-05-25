@@ -45,7 +45,7 @@ var statsController = function(Request){
 			return new Q.Promise(function(resolve,reject){
 				groupedRequests = Requests.countBy("operator_id");
 				if(Object.keys(groupedRequests).length){
-					console.log(groupedRequests);
+					console.log("!!", groupedRequests);
 					resolve(groupedRequests);
 				}
 				else{
