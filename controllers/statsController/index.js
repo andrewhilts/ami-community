@@ -72,12 +72,12 @@ var statsController = function(Request){
 		var dates = new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
-			// qb.orderBy('request_date');
+			qb.orderBy('request_date');
 		})
 		.fetch();
 		return new Q.Promise(function(resolve,reject){
 			dates.then(function(requests){
-				// operatorTotals = requests.countBy("request_date");
+				operatorTotals = requests.countBy("request_date");
 				resolve(requests);
 			})
 			.catch(function(err){
