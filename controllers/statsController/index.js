@@ -73,7 +73,7 @@ var statsController = function(Request){
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
-			qb.orderBy('request_date');
+			// qb.orderBy('request_date');
 		})
 		.fetch();
 		return new Q.Promise(function(resolve,reject){
