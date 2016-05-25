@@ -43,7 +43,10 @@ var statsController = function(Request){
 		.fetch()
 		return new Q.Promise(function(resolve,reject){
 			companies.then(function(requests){
-				groupedRequests = requests.groupBy("operator_id");
+				groupedRequests = requests.countBy("operator_id").pairs()
+  .sortBy(1).reverse()
+  .pluck(0)
+  .value();
 				if(Object.keys(groupedRequests).length){
 					resolve(groupedRequests);
 				}
