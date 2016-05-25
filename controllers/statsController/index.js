@@ -44,12 +44,13 @@ var statsController = function(Request){
 		return new Q.Promise(function(resolve,reject){
 			companies.then(function(requests){
 				operatorTotals = requests.countBy("operator_id");
-				var sortedOperatorTotals = [];
+				var sortable = [];
 				for (var operator in operatorTotals)
-				      sortedOperatorTotals.push({"operator_id": operator, "count": operatorTotals[operator]});
-				sortedOperatorTotals.sort(function(a, b) {return a[1] - b[1]})
-				if(Object.keys(sortedOperatorTotals).length){
-					resolve(sortedOperatorTotals);
+				      sortable.push([operator, operatorTotals[operator]])
+				sortable.sort(function(a, b) {return a[1] - b[1]})
+				
+				if(Object.keys(sortable).length){
+					resolve(sortable);
 				}
 				else{
 					reject("No events");
