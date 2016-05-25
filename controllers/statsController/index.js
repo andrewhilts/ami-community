@@ -100,7 +100,7 @@ var statsController = function(Request){
 			})
 		}
 		startDate = moment(formattedDateRange[0].request_date, 'YYYY-MM-DD');
-		endDate = moment(formattedDateRange[formattedDateRange.length-1].request_date, 'YYYY-MM-DD');
+		endDate = moment(formattedDateRange[formattedDateRange.length-1].request_date, 'YYYY-MM-DD').add(5, 'days');
 		momentRange = moment.range(dates);
 		momentRange.by('days', function(moment){
 			dateStr - moment.format('YYYY-MM-DD');
