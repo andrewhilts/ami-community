@@ -90,7 +90,7 @@ var statsController = function(Request){
 		var dates = Object.keys(dateRange);
 		var formattedDateRange = [];
 		for(var i=0; i < dates.length; i++){
-			console.log(dates[i]);
+			console.log(moment.utc(dates[i]));
 			// formattedDateRange.push({
 			// 	"request_date": moment.utc(dates[i]).format('YYYY-MM-DD'),
 			// 	"count": dateRange[dates[i]]
