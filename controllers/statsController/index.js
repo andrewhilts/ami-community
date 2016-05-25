@@ -90,12 +90,13 @@ var statsController = function(Request){
 		var dates = Object.keys(dateRange);
 		var formattedDateRange = [];
 		for(var i=0; i < dates.length; i++){
-			formattedDateRange.push({
-				"request_date": moment.utc(dates[i]).format('YYYY-MM-DD'),
-				"count": dateRange[dates[i]]
-			})
+			console.log(moment.utc(dates[i]).format('YYYY-MM-DD'));
+			// formattedDateRange.push({
+			// 	"request_date": moment.utc(dates[i]).format('YYYY-MM-DD'),
+			// 	"count": dateRange[dates[i]]
+			// })
 		}
-		return formattedDateRange;
+		return dateRange;
 	}
 	self.methodAllocator = function(req, res){
 		var method = req.params.method;
