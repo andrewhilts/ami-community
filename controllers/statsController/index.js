@@ -115,8 +115,9 @@ var statsController = function(Request){
 				finalData.request_date = dateStr;
 				finalData.count = 0;
 			}
+			finalRange.push(finalData);
 		});
-		return finalData;
+		return finalRange;
 	}
 	self.methodAllocator = function(req, res){
 		var method = req.params.method;
