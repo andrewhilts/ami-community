@@ -44,6 +44,7 @@ var statsController = function(Request){
 		return new Q.Promise(function(resolve,reject){
 			companies.then(function(requests){
 				groupedRequests = requests.countBy("operator_id");
+				_.mapValues(_.invert(_.invert(groupedRequests)),parseInt);
 				if(Object.keys(groupedRequests).length){
 					resolve(groupedRequests);
 				}
