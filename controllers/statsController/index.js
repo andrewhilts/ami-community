@@ -78,8 +78,8 @@ var statsController = function(Request){
 		.fetch();
 		return new Q.Promise(function(resolve,reject){
 			dates.then(function(requests){
-				operatorTotals = requests.countBy("request_date");
-				resolve(operatorTotals);
+				// operatorTotals = requests.countBy("request_date");
+				resolve(requests);
 			})
 			.catch(function(err){
 				reject("err");
