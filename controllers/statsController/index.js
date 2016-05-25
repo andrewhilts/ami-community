@@ -2,14 +2,15 @@ var async = require('async');
 var Q = require('q');
 
 var statsController = function(Request){
-	this.getTotal = function(jurisdiction_id){
+	var self = this;
+	self.getTotal = function(jurisdiction_id){
 		return new RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
 		.count();
 	}
-	this.getVerified = function(jurisdiction_id){
+	self.getVerified = function(jurisdiction_id){
 		return new RequestCollection()
 		.query(function(qb){
 			qb.innerJoin('request_contacts', 'requests.request_id', 'request_contacts.request_id');
@@ -17,7 +18,7 @@ var statsController = function(Request){
 		})
 		.count();
 	}
-	this.getByCompany = function(jurisdiction_id){
+	self.getByCompany = function(jurisdiction_id){
 		return new RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
@@ -25,7 +26,7 @@ var statsController = function(Request){
 		})
 		.count();
 	}
-	this.getByDate = function(jurisdiction_id){
+	self.getByDate = function(jurisdiction_id){
 		return new RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
@@ -45,16 +46,16 @@ var statsController = function(Request){
 		}
 		switch(method){
 			case "getTotal":
-				jsonPromise = this.getTotal(jurisdiction);
+				jsonPromise = self.getTotal(jurisdiction);
 			break;
 			case "getVerified":
-				jsonPromise = this.getVerified(jurisdiction);
+				jsonPromise = self.getVerified(jurisdiction);
 			break;
 			case "getByCompany":
-				jsonPromise = this.getByCompany(jurisdiction);
+				jsonPromise = self.getByCompany(jurisdiction);
 			break;
 			case "getByDate":
-				jsonPromise = this.getByDate(jurisdiction);
+				jsonPromise = self.getByDate(jurisdiction);
 			break;
 			default:
 				throw new Error("Incorrect method provided");
@@ -68,6 +69,6 @@ var statsController = function(Request){
 			}
 		});
 	}
-	return this;
+	return self;
 }
 module.exports.statsController = statsController;
