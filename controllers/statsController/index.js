@@ -8,8 +8,7 @@ var statsController = function(Request){
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
-		.count()
-		.toJSON();
+		.count();
 	}
 	self.getVerified = function(jurisdiction_id){
 		return new Request.RequestCollection()
@@ -17,8 +16,7 @@ var statsController = function(Request){
 			qb.innerJoin('request_contacts', 'requests.request_id', 'request_contacts.request_id');
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
-		.count()
-		.toJSON();
+		.count();
 	}
 	self.getByCompany = function(jurisdiction_id){
 		return new Request.RequestCollection()
@@ -26,8 +24,7 @@ var statsController = function(Request){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
 		})
-		.count()
-		.toJSON();
+		.count();
 	}
 	self.getByDate = function(jurisdiction_id){
 		return new Request.RequestCollection()
@@ -35,8 +32,7 @@ var statsController = function(Request){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
 		})
-		.count()
-		.toJSON();
+		.count();
 	}
 	this.methodAllocator = function(req, res){
 		var method = req.params.method;
