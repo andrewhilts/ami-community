@@ -102,14 +102,13 @@ var statsController = function(Request){
 		startDate = moment(formattedDateRange[0].request_date, 'YYYY-MM-DD');
 		endDate = moment(formattedDateRange[formattedDateRange.length-1].request_date, 'YYYY-MM-DD').add(5, 'days');
 		momentRange = moment.range(dates);
-		return formattedDateRange;
 		momentRange.by('days', function(moment){
 			dateStr = moment.format('YYYY-MM-DD');
 			var finalData = {};
 			var dateData = _.find(formattedDateRange, {"request_date": dateStr})
 			if(dateData){
 				finalData.request_date = dateData.requestData;
-				finalData.count = dateData.count + 100;
+				finalData.count = dateData.count;
 			}
 			else{
 				finalData.request_date = dateStr;
