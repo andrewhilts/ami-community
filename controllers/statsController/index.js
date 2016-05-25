@@ -34,8 +34,8 @@ var statsController = function(Request){
 		.count();
 	}
 	this.methodAllocator = function(res, req){
-		var method = request.params.method;
-		var jurisdiction = parseInt(request.params.jurisdiction);
+		var method = req.params.method;
+		var jurisdiction = parseInt(req.params.jurisdiction);
 		if(isNaN(jurisdiction)){
 			throw new Error("jurisdiction not a number");
 		}
