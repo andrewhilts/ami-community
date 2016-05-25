@@ -7,7 +7,7 @@ var Request = function(bookshelf){
 		'tableName': 'requests',
 		'idAttribute': 'request_id',
 		parse: function(attrs){
-			attrs.request_date = moment(attrs.request_date).format('YYYY-MM-DD')
+			attrs.request_date = moment(attrs.request_date, "YYYY-MM-DD HH:mm:ssZZ").format('YYYY-MM-DD')
 		}
 	});
 	var RequestCollection = bookshelf.Collection.extend({
