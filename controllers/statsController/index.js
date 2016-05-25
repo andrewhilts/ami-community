@@ -23,8 +23,8 @@ var statsController = function(Request){
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
-		.groupBy('operator_id')
-		.fetch();
+		.fetch()
+		.groupBy('operator_id');
 	}
 	self.getByDate = function(jurisdiction_id){
 		return new Request.RequestCollection()
