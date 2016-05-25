@@ -60,13 +60,12 @@ var statsController = function(Request){
 			default:
 				throw new Error("Incorrect method provided");
 		}
-		jsonPromise.then(function(err, data){
-			if(err){
-				throw new Error(err);
-			}
-			else{
-				res.json(data.toJSON());
-			}
+		jsonPromise
+		.then(function(data){
+			res.json(data.toJSON());
+		})
+		.catch(function(err){
+			throw new Error(err);
 		});
 	}
 	return self;
