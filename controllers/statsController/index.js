@@ -72,7 +72,7 @@ var statsController = function(Request){
 		var dates = new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
-			qb.groupBy('operator_id');
+			qb.groupBy('request_date');
 			// qb.orderBy('request_date');
 		})
 		.fetch();
