@@ -1,17 +1,17 @@
 var async = require('async');
 var Q = require('q');
 
-var statsController = function(RequestCollection){
+var statsController = function(Request){
 	var self = this;
 	self.getTotal = function(jurisdiction_id){
-		return new RequestCollection()
+		return new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
 		.count();
 	}
 	self.getVerified = function(jurisdiction_id){
-		return new RequestCollection()
+		return new Request.RequestCollection()
 		.query(function(qb){
 			qb.innerJoin('request_contacts', 'requests.request_id', 'request_contacts.request_id');
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
@@ -19,7 +19,7 @@ var statsController = function(RequestCollection){
 		.count();
 	}
 	self.getByCompany = function(jurisdiction_id){
-		return new RequestCollection()
+		return new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
@@ -27,7 +27,7 @@ var statsController = function(RequestCollection){
 		.count();
 	}
 	self.getByDate = function(jurisdiction_id){
-		return new RequestCollection()
+		return new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
