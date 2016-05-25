@@ -69,14 +69,14 @@ var statsController = function(Request){
 		});
 	}
 	self.getByDate = function(jurisdiction_id){
-		return new Request.RequestCollection()
+		var dates = new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 			qb.groupBy('operator_id');
 			qb.orderBy('request_date');
 		})
 		return new Q.Promise(function(resolve,reject){
-			companies.then(function(requests){
+			dates.then(function(requests){
 				operatorTotals = requests.countBy("request_date");
 				if(Object.keys(operatorTotals).length){
 					resolve(operatorTotals);
