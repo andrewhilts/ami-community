@@ -55,7 +55,7 @@ var statsController = function(Request){
 				for (var i=0; i < sortable.length; i++){
 					sortedOperatorTotals.push({
 						"operator_id": sortable[i][0],
-						"total": sortable[i][1]
+						"count": sortable[i][1]
 					});
 				}
 				if(Object.keys(sortedOperatorTotals).length){
