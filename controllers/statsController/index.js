@@ -77,16 +77,19 @@ var statsController = function(Request){
 		.fetch();
 		return new Q.Promise(function(resolve,reject){
 			dates.then(function(requests){
-				operatorTotals = requests.countBy("request_date");
-				self.formatDates(operatorTotals)
-				resolve(operatorTotals);
+				dateTotals = requests.countBy("request_date");
+				dateTotals = self.formatDates(dateTotals)
+				resolve(dateTotals);
 			})
 			.catch(function(err){
 				reject("err");
 			})
 		});
 	}
-	this.methodAllocator = function(req, res){
+	self.formatDates = function(dateRange){
+		return dateRange;
+	}
+	self.methodAllocator = function(req, res){
 		var method = req.params.method;
 		var jurisdiction = parseInt(req.params.jurisdiction);
 		if(isNaN(jurisdiction)){
