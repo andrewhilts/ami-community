@@ -1,30 +1,56 @@
 var async = require('async');
 var Q = require('q');
+var _ = require('lodash');
 
 var statsController = function(Request){
 	var self = this;
 	self.getTotal = function(jurisdiction_id){
-		return new Request.RequestCollection()
+		var count = new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
 		.count();
+		return new Q.Promise(function(resolve,reject){
+			count.then(function(collection){
+				resolve(collection);
+			})
+			count.catch(function(err){
+				reject(err);
+			})
+		});
 	}
 	self.getVerified = function(jurisdiction_id){
-		return new Request.RequestCollection()
+		var count = new Request.RequestCollection()
 		.query(function(qb){
 			qb.innerJoin('request_contacts', 'requests.request_id', 'request_contacts.request_id');
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
 		.count();
+		return new Q.Promise(function(resolve,reject){
+			count.then(function(collection){
+				resolve(collection);
+			})
+			count.catch(function(err){
+				reject(err);
+			})
+		});
 	}
 	self.getByCompany = function(jurisdiction_id){
 		return new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
 		})
-		.fetch()
-		.groupBy('operator_id');
+		.then(function(collection){
+			return new Q.Promise(function(resolve,reject){
+				groupedEvents = events.countBy("operator_id");
+				if(Object.keys(groupedEvents).length){
+					resolve(groupedEvents);
+				}
+				else{
+					reject("No events");
+				}
+			});
+		})
 	}
 	self.getByDate = function(jurisdiction_id){
 		return new Request.RequestCollection()
