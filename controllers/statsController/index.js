@@ -142,7 +142,7 @@ var statsController = function(Request){
 				jsonPromise = self.getByDate(jurisdiction);
 			break;
 			default:
-				throw new Error("Incorrect method provided");
+				res.status(404);
 		}
 		console.log(jsonPromise);
 		jsonPromise
