@@ -48,6 +48,7 @@ var statsController = function(Request){
 			companies.then(function(requests){
 				console.log("db done");
 				if(!requests.length){
+					console.log("no requests");
 					reject("No requests");
 				}
 				operatorTotals = requests.countBy("operator_id");
@@ -87,6 +88,7 @@ var statsController = function(Request){
 			dates.then(function(requests){
 				console.log("db done");
 				if(!requests.length){
+					console.log("no requests");
 					reject("No requests");
 				}
 				dateTotals = requests.countBy("request_date");
