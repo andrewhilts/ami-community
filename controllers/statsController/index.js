@@ -44,11 +44,8 @@ var statsController = function(Request){
 		})
 		.fetch()
 		return new Q.Promise(function(resolve,reject){
-			console.log("promise");
 			companies.then(function(requests){
-				console.log("db done");
 				if(!requests.length){
-					console.log("no requests");
 					reject("No requests");
 				}
 				operatorTotals = requests.countBy("operator_id");
@@ -84,11 +81,8 @@ var statsController = function(Request){
 		})
 		.fetch();
 		return new Q.Promise(function(resolve,reject){
-			console.log("promise");
 			dates.then(function(requests){
-				console.log("db done");
 				if(!requests.length){
-					console.log("no requests");
 					reject("No requests");
 				}
 				dateTotals = requests.countBy("request_date");
@@ -163,7 +157,7 @@ var statsController = function(Request){
 		})
 		.catch(function(err){
 			console.log(err);
-			throw new Error(err);
+			res.status(404).json({msg: "error: "+err});
 		});
 	}
 	return self;
