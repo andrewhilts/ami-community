@@ -162,6 +162,7 @@ var statsController = function(Request){
 			res.json(data);
 		})
 		.catch(function(err){
+			console.log(err);
 			throw new Error(err);
 		});
 	}
