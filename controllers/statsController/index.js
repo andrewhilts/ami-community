@@ -44,7 +44,9 @@ var statsController = function(Request){
 		})
 		.fetch()
 		return new Q.Promise(function(resolve,reject){
+			console.log("promise");
 			companies.then(function(requests){
+				console.log("db done");
 				if(!requests.length){
 					reject("No requests");
 				}
@@ -81,7 +83,9 @@ var statsController = function(Request){
 		})
 		.fetch();
 		return new Q.Promise(function(resolve,reject){
+			console.log("promise");
 			dates.then(function(requests){
+				console.log("db done");
 				if(!requests.length){
 					reject("No requests");
 				}
