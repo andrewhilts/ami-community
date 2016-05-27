@@ -46,7 +46,7 @@ var statsController = function(Request){
 		return new Q.Promise(function(resolve,reject){
 			companies.then(function(requests){
 				if(!requests.length){
-					reject("No requests");
+					resolve({"count": 0});
 				}
 				operatorTotals = requests.countBy("operator_id");
 				var sortable = [];
@@ -83,7 +83,7 @@ var statsController = function(Request){
 		return new Q.Promise(function(resolve,reject){
 			dates.then(function(requests){
 				if(!requests.length){
-					reject("No requests");
+					resolve({"count": 0});
 				}
 				dateTotals = requests.countBy("request_date");
 				dateTotals = self.formatDates(dateTotals)
