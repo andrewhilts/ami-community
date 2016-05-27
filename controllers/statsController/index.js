@@ -44,7 +44,9 @@ var statsController = function(Request){
 		})
 		.fetch()
 		return new Q.Promise(function(resolve,reject){
+			console.log("promise");
 			companies.then(function(requests){
+				console.log("db ok");
 				if(!requests.length){
 					resolve({"count": 0});
 				}
