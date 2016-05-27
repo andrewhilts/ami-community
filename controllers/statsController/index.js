@@ -129,10 +129,10 @@ var statsController = function(Request){
 	self.methodAllocator = function(req, res){
 		var method = req.params.method;
 		var jurisdiction = parseInt(req.params.jurisdiction);
+		var jsonPromise;
 		if(isNaN(jurisdiction)){
 			throw new Error("jurisdiction not a number");
 		}
-		var jsonPromise;
 		if(typeof method == "undefined" || typeof jurisdiction == "undefined"){
 			throw new Error("Missing parameters");
 		}
@@ -150,7 +150,8 @@ var statsController = function(Request){
 				jsonPromise = self.getByDate(jurisdiction);
 			break;
 			default:
-				res.status(404);
+				res.status(404).json({msg: "error"});
+				return null;
 		}
 		console.log(jsonPromise);
 		jsonPromise
