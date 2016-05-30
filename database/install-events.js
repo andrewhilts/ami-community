@@ -59,7 +59,8 @@ saveEvent = function(eventObj, key, callback){
 		eventObj.name, 
 		eventObj.description, 
 		eventObj.jurisdiction_id, 
-		eventObj.days_to_reminder
+		eventObj.days_to_reminder,
+		eventObj.email_template
 	)
 	.then(function(model){
 		callback();
