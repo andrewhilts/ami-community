@@ -45,18 +45,19 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.sendEventEmail = function(eventModel, request, requestContact){
+		console.log("test 1")
 		var email = new Email();
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
 		var request_date = request.get("request_date");
 		var templatePrefix = eventModel.get("email_template");
 		var unsubscribeURL = email.makeUnsubLink(address);
-
+console.log("test 1.5")
 		var language = request.get('language');
 		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
 		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
-
+		console.log("test 2")
 		// Change based on event type
 		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
 		try{
