@@ -39,7 +39,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			});
 		}, function(err){
 			console.log("Calling back");
-			bigCallback(err);
+			bigCallback(err, eventModel, requestEvents, requests, requestContacts);
 		});
 	}
 
@@ -205,7 +205,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				function(eventModel, requestEvents, requests, requestContacts, callback){
 					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts, callback);
 				},
-				function(eventModel, requestEvents, requests, requestContacts, emailParams, result, callback){
+				function(eventModel, requestEvents, requests, requestContacts,  callback){
 					self.markEventsAsSent(requestEvents)
 					.then(function(result){
 						console.log(result);
