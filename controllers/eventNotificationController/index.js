@@ -41,7 +41,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		});
 	}
 
-	self.sendEventEmail = function(eventModel, requests, requestContact, callback){
+	self.sendEventEmail = function(eventModel, request, requestContact, callback){
 		var email = new Email();
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
