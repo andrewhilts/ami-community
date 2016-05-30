@@ -56,7 +56,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
 
 		// Change based on event type
-		var templateDir = "emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
+		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
 		var confirmationTemplate = new EmailTemplate(templateDir);
 
 		switch(language){
