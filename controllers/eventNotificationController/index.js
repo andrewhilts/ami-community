@@ -56,7 +56,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
 		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
-		console.log("test 1")
+
 		// Change based on event type
 		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
 		try{
@@ -67,7 +67,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				reject(e);
 			});
 		}
-		console.log("test 2")
+
 		switch(language){
 			case "en":
 			subject = "A message from Access My Info Hong Kong"
@@ -76,17 +76,19 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			subject = "A message from Access My Info Hong Kong"
 			break;
 		}
-		console.log("test 3")
+
 		var params = {
 			operator_title: operator_title,
 			request_date: request_date,
 			unsubscribeURL: unsubscribeURL,
 			amiLogoPath: amiLogoPath
 		}
-		console.log("test 4")
+		console.log("test 1")
 		return new Q.Promise(function(resolve,reject){
+			console.log("test 2")
 			confirmationTemplate.render(params, function(err, results){
 				if(err){
+					console.log("test 3")
 					console.log(err);
 					reject(err);
 				}
