@@ -37,6 +37,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				});
 			});
 		}, function(err){
+			console.log("Calling back");
 			bigCallback(err);
 		});
 	}
