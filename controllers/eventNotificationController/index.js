@@ -12,6 +12,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.getUnsentRequestEventsByDate = function(date){
+		console.log('getting unsent request events');
 		return new RequestEvent.RequestEventModel()
 		.where('email_schedule_date', '<=', date.format('YYYY-MM-DD'))
 		.where('email_sent', false)
