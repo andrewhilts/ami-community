@@ -19,10 +19,21 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		.fetchAll();
 	}
 
-	// self.sendEventEmails = function(eventModel, requestEvent, requestContact)
-	// requestEvents.models.forEach(function(model){
-
-	// });
+	self.sendEventEmails = function(eventModel, requests, requestContacts){
+		async.each(requestEvents.models, function(requestEvent, subCallback){
+			var requestContact = requestContacts.where({"request_id", requestEvent.get('request_id')});
+			var request = requests.where({"request_id", requestEvent.get('request_id')});
+			return new Q.Promise(function(resolve,reject){
+				console.log(requestContact.get('email_address'));
+				resolve();
+			});
+		}, function(err){
+			return new Q.Promise(function(resolve,reject){
+				console.log(err);
+				reject(err);
+			});
+		});
+	}
 
 	self.sendEventEmail = function(eventModel, requests, requestContact, callback){
 		var email = new Email();
@@ -194,14 +205,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					})
 				},
 				function(eventModel, requestEvents, requests, requestContacts, callback){
-					console.log({
-						'eventModel': eventModel, 
-						'requestEvents': requestEvents, 
-						'requests': requests, 
-						'requestContacts': requestContacts
-					})
-					callback("error");
-					return;
 					self.sendEventEmails(eventModel, requests, requestContacts)
  					.then(function(result){
 						callback(null, eventModel, requestEvents, requests, requestContacts, emailParams, result)
@@ -210,17 +213,18 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 						console.log("err", e);
 						callback(e);
 					})
-				},
-				function(eventModel, requestEvents, requests, requestContacts, emailParams, result, callback){
-					self.markEventsAsSent(requestEvents)
-					.then(function(result){
-						callback(null, result)
-					})
-					.catch(function(e){
-						console.log("err", e);
-						callback(e);
-					})
 				}
+				//,
+				// function(eventModel, requestEvents, requests, requestContacts, emailParams, result, callback){
+				// 	self.markEventsAsSent(requestEvents)
+				// 	.then(function(result){
+				// 		callback(null, result)
+				// 	})
+				// 	.catch(function(e){
+				// 		console.log("err", e);
+				// 		callback(e);
+				// 	})
+				// }
 			], function(err, result){
 				if(err){
 					reject(err);
