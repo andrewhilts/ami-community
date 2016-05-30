@@ -158,7 +158,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.sendRequestEventNotificationType = function(requestEvents){
-		console.log("starting to send request Event for type");
+		console.log("starting to send request event for type");
 		return new Q.Promise(function(resolve,reject){
 			async.waterfall([
 				function(callback){
@@ -177,6 +177,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					})
 				},
 				function(eventModel, requestEvents, callback){
+					console.log("getting request details");
 					self.getRequestDetails(requestEvents)
 					.then(function(requests){
 						if(requests.models.length){
