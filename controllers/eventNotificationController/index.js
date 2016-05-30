@@ -28,7 +28,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			console.log("!!");
 			self.sendEventEmail(eventModel, request, requestContact)
 			.then(function(request, requestContact, result){
-				console.log(result);
+				console.log("hi");
 				callback(null, request, requestContact, result)
 			})
 			.catch(function(e){
