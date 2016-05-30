@@ -30,10 +30,12 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				console.log(result);
 				callback(null, request, requestContact, result)
 			})
-			.catch(function(err){
-				console.log(err);
-				callback();
-			})
+			.catch(function(e){
+				callback({
+					"statusCode": "M1", 
+					"message": "Unable to sent email."
+				});
+			});
 		}, function(err){
 			return new Q.Promise(function(resolve,reject){
 				console.log(err);
@@ -42,7 +44,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		});
 	}
 
-	self.sendEventEmail = function(eventModel, request, requestContact, callback){
+	self.sendEventEmail = function(eventModel, request, requestContact){
 		var email = new Email();
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
@@ -98,15 +100,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				// .catch(function(err){
 				// 	reject(err);
 				// })
-			});
-		})
-		.then(function(result){
-			callback(null, request, requestContact, result);
-		})
-		.catch(function(e){
-			callback({
-				"statusCode": "M1", 
-				"message": "Unable to sent email."
 			});
 		});
 	}
