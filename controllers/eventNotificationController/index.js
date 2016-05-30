@@ -21,17 +21,15 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 
 	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts){
 		console.log("Starting to send individual emails");
-		async.each(requestEvents.models, function(requestEvent, subCallback){
+		async.each(requestEvents.models, function(requestEvent, callback){
 			var requestContact = requestContacts.where({"request_id": requestEvent.get('request_id')});
 			var request = requests.where({"request_id": requestEvent.get('request_id')});
-			return new Q.Promise(function(resolve,reject){
-				console.log(requestContact.get('email_address'));
-				resolve();
-			});
+			console.log(requestContact.get('email_address'));
+			callback();
 		}, function(err){
 			return new Q.Promise(function(resolve,reject){
 				console.log(err);
-				reject(err);
+				callback(err);
 			});
 		});
 	}
