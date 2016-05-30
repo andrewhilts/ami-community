@@ -23,11 +23,13 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts, bigCallback){
 		console.log("Starting to send individual emails");
 		async.each([requestEvents.first()], function(requestEvent, callback){
+			console.log("Building email");
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
 			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
 			self.sendEventEmail(eventModel, request, requestContact)
 			.then(function(request, requestContact, result){
 				console.log("SendEventEmailCallback");
+				callback(null, request, requestContact, result)
 			})
 			.catch(function(e){
 				callback({
