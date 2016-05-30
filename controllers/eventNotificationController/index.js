@@ -3,6 +3,7 @@ var Q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 var policy = require('../../conf/policy.conf').policy;
+var EmailTemplate = require('email-templates').EmailTemplate;
 
 var EventNotificationController = function(Event, Request, RequestEvent){
 	var self = this;
