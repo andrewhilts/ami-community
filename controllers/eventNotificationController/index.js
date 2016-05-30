@@ -57,7 +57,12 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 
 		// Change based on event type
 		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
+		try{
 		var confirmationTemplate = new EmailTemplate(templateDir);
+		}
+		catch(e){
+			callback(e);
+		}
 
 		switch(language){
 			case "en":
