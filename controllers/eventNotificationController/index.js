@@ -83,13 +83,10 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			unsubscribeURL: unsubscribeURL,
 			amiLogoPath: amiLogoPath
 		}
-		console.log("test 1")
 		return new Q.Promise(function(resolve,reject){
-			console.log("test 2")
 			confirmationTemplate.render(params, function(err, results){
 				if(err){
-					console.log("test 3")
-					console.log(err);
+					console.log("error", err);
 					reject(err);
 				}
 				else{
