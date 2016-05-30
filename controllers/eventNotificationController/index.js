@@ -95,6 +95,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					html: results.html
 				})
 				.then(function(result){
+					console.log("sent");
 					resolve(result);
 				})
 				.catch(function(err){
