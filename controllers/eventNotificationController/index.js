@@ -28,7 +28,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			self.sendEventEmail(eventModel, request, requestContact)
 			.then(function(request, requestContact, result){
 				console.log("SendEventEmailCallback");
-				callback(null, request, requestContact, result)
 			})
 			.catch(function(e){
 				callback({
@@ -204,7 +203,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				},
 				function(eventModel, requestEvents, requests, requestContacts, callback){
 					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts, function(err, results){
-						console.log("big callback");
 						callback(err, eventModel, requestEvents, requests, requestContacts, emailParams, result)
 					});
 				}
