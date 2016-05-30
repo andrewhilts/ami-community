@@ -22,7 +22,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	self.sendEventEmails = function(eventModel, requests, requestContacts){
 		async.each(requestEvents.models, function(requestEvent, subCallback){
 			var requestContact = requestContacts.where({"request_id", requestEvent.get('request_id')});
-			var request = requests.where({"request_id", requestEvent.get('request_id')});
+			var request = requests.where({"request_id": requestEvent.get('request_id')});
 			return new Q.Promise(function(resolve,reject){
 				console.log(requestContact.get('email_address'));
 				resolve();
