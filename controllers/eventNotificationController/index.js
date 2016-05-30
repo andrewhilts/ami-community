@@ -25,6 +25,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		async.each([requestEvents.first()], function(requestEvent, callback){
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
 			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
+			console.log("!!");
 			self.sendEventEmail(eventModel, request, requestContact)
 			.then(function(request, requestContact, result){
 				console.log(result);
@@ -60,10 +61,12 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		// Change based on event type
 		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
 		try{
-		var confirmationTemplate = new EmailTemplate(templateDir);
+			var confirmationTemplate = new EmailTemplate(templateDir);
 		}
 		catch(e){
-			callback(e);
+			return new Q.Promise(function(resolve,reject){
+				reject(e);
+			});
 		}
 
 		switch(language){
