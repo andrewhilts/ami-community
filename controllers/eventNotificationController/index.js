@@ -22,8 +22,8 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts){
 		console.log("Starting to send individual emails");
 		async.each(requestEvents.models, function(requestEvent, callback){
-			var requestContact = requestContacts.find({"request_id": requestEvent.get('request_id')});
-			var request = requests.find({"request_id": requestEvent.get('request_id')});
+			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
+			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
 			console.log(requestContact.get('email_address'));
 			callback();
 		}, function(err){
