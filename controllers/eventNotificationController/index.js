@@ -206,7 +206,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				function(eventModel, requestEvents, requests, requestContacts, callback){
 					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts, function(err, results){
 						console.log("called back", callback);
-						callback(err, eventModel, requestEvents, requests, requestContacts, emailParams, result)
+						callback(err, eventModel, requestEvents, requests, requestContacts, emailParams)
 					});
 				}
 				//,
