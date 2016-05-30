@@ -31,6 +31,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				callback(null, request, requestContact, result)
 			})
 			.catch(function(e){
+				console.log(e);
 				callback({
 					"statusCode": "M1", 
 					"message": "Unable to sent email."
