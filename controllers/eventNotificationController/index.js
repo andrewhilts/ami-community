@@ -317,4 +317,5 @@ notifier.notify()
 	bookshelf.knex.destroy();
 })
 };
+run();
 
