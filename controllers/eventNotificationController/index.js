@@ -37,7 +37,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				});
 			});
 		}, function(err){
-			console.log("Done async each");
+			console.log(err, "Done async each");
 			bigCallback(err);
 		});
 	}
