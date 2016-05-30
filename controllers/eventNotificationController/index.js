@@ -88,18 +88,18 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				}
 				console.log(results.html);
 				resolve();
-				// email.send({
-				// 	to:address, 
-				// 	subject: subject,
-				// 	text: results.text,
-				// 	html: results.html
-				// })
-				// .then(function(result){
-					// resolve(result);
-				// })
-				// .catch(function(err){
-				// 	reject(err);
-				// })
+				email.send({
+					to:address, 
+					subject: subject,
+					text: results.text,
+					html: results.html
+				})
+				.then(function(result){
+					resolve(result);
+				})
+				.catch(function(err){
+					reject(err);
+				})
 			});
 		});
 	}
