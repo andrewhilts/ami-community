@@ -22,7 +22,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 
 	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts, bigCallback){
 		console.log("Starting to send individual emails");
-		async.each([requestEvents.first()], function(requestEvent, callback){
+		return async.each([requestEvents.first()], function(requestEvent, callback){
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
 			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
 			self.sendEventEmail(eventModel, request, requestContact)
@@ -36,9 +36,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					"message": "Unable to sent email."
 				});
 			});
-		}, function(err){
-			console.log("Calling back");
-			bigCallback(err);
 		});
 	}
 
@@ -204,10 +201,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					})
 				},
 				function(eventModel, requestEvents, requests, requestContacts, callback){
-					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts, function(err, results){
-						console.log("called back", callback);
-						callback(err, eventModel, requestEvents, requests, requestContacts, emailParams)
-					});
+					console.log(self.sendEventEmails(eventModel, requestEvents, requests, requestContacts));
 				}
 				//,
 				// function(eventModel, requestEvents, requests, requestContacts, emailParams, result, callback){
