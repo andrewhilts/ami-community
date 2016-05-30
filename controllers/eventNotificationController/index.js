@@ -24,17 +24,15 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		async.each(requestEvents.models, function(requestEvent, callback){
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
 			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
-			console.log(eventModel);
-			callback();
-			// self.sendEventEmail(eventModel, request, requestContact)
-			// .then(function(request, requestContact, result){
-			// 	console.log(result);
-			// 	callback(null, request, requestContact, result)
-			// })
-			// .catch(function(err){
-			// 	console.log(err);
-			// 	callback();
-			// })
+			self.sendEventEmail(eventModel, request, requestContact)
+			.then(function(request, requestContact, result){
+				console.log(result);
+				callback(null, request, requestContact, result)
+			})
+			.catch(function(err){
+				console.log(err);
+				callback();
+			})
 		}, function(err){
 			return new Q.Promise(function(resolve,reject){
 				console.log(err);
@@ -47,7 +45,8 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		var email = new Email();
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
-
+		var request_date = request.get("request_date");
+		var templatePrefix = eventModel.get("email_template");
 		var unsubscribeURL = email.makeUnsubLink(address);
 
 		var language = request.get('language');
@@ -56,7 +55,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
 
 		// Change based on event type
-		var templateDir = "emailTemplates/reminder-"+language+"-"+jurisdiction;
+		var templateDir = "emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
 		var confirmationTemplate = new EmailTemplate(templateDir);
 
 		switch(language){
@@ -69,6 +68,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		}
 		var params = {
 			operator_title: operator_title,
+			request_date: request_date,
 			unsubscribeURL: unsubscribeURL,
 			amiLogoPath: amiLogoPath
 		}
@@ -78,19 +78,20 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					console.log(err);
 					reject(err);
 				}
-
-				email.send({
-					to:address, 
-					subject: subject,
-					text: results.text,
-					html: results.html
-				})
-				.then(function(result){
-					resolve(result);
-				})
-				.catch(function(err){
-					reject(err);
-				})
+				console.log(results.html);
+				resolve();
+				// email.send({
+				// 	to:address, 
+				// 	subject: subject,
+				// 	text: results.text,
+				// 	html: results.html
+				// })
+				// .then(function(result){
+					// resolve(result);
+				// })
+				// .catch(function(err){
+				// 	reject(err);
+				// })
 			});
 		})
 		.then(function(result){
