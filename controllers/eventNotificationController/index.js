@@ -20,7 +20,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		.fetchAll();
 	}
 
-	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts, callback){
+	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts, bigCallback){
 		console.log("Starting to send individual emails");
 		async.each([requestEvents.first()], function(requestEvent, callback){
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
@@ -38,7 +38,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			});
 		}, function(err){
 			console.log("Done async each");
-			callback(err);
+			bigCallback(err);
 		});
 	}
 
