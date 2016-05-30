@@ -37,7 +37,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				});
 			});
 		}, function(err){
-			console.log(err, "Done async each");
 			bigCallback(err);
 		});
 	}
@@ -205,6 +204,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				},
 				function(eventModel, requestEvents, requests, requestContacts, callback){
 					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts, function(err, results){
+						console.log("big callback");
 						callback(err, eventModel, requestEvents, requests, requestContacts, emailParams, result)
 					});
 				}
