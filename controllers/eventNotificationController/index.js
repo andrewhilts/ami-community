@@ -20,7 +20,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		.fetchAll();
 	}
 
-	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts){
+	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts, callback){
 		console.log("Starting to send individual emails");
 		async.each([requestEvents.first()], function(requestEvent, callback){
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
@@ -38,9 +38,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			});
 		}, function(err){
 			console.log("Done async each");
-			return new Q.Promise(function(resolve,reject){
-				resolve(err);
-			});
+			callback(err);
 		});
 	}
 
@@ -206,14 +204,9 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					})
 				},
 				function(eventModel, requestEvents, requests, requestContacts, callback){
-					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts)
- 					.then(function(result){
-						callback(null, eventModel, requestEvents, requests, requestContacts, emailParams, result)
-					})
-					.catch(function(e){
-						console.log("err", e);
-						callback(e);
-					})
+					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts, function(err, results){
+						callback(err, eventModel, requestEvents, requests, requestContacts, emailParams, result)
+					});
 				}
 				//,
 				// function(eventModel, requestEvents, requests, requestContacts, emailParams, result, callback){
