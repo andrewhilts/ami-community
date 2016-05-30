@@ -146,11 +146,8 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.markEventsAsSent = function(requestEvents, results){
-		console.log("hi");
 		requestEvents.models.forEach(function(model){
 			model.set({'email_sent': true});
-			model.unset('request');
-			model.unset('requestContact');
 		});
 		return requestEvents.invokeThen('save', null);
 	}
@@ -211,6 +208,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				function(eventModel, requestEvents, requests, requestContacts, emailParams, result, callback){
 					self.markEventsAsSent(requestEvents)
 					.then(function(result){
+						console.log(result);
 						callback(null, result)
 					})
 					.catch(function(e){
