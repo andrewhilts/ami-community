@@ -24,8 +24,17 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		async.each(requestEvents.models, function(requestEvent, callback){
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
 			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
-			console.log(requestContact.get('email_address'));
+			console.log(eventModel);
 			callback();
+			// self.sendEventEmail(eventModel, request, requestContact)
+			// .then(function(request, requestContact, result){
+			// 	console.log(result);
+			// 	callback(null, request, requestContact, result)
+			// })
+			// .catch(function(err){
+			// 	console.log(err);
+			// 	callback();
+			// })
 		}, function(err){
 			return new Q.Promise(function(resolve,reject){
 				console.log(err);
