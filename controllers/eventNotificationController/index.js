@@ -25,10 +25,8 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		async.each([requestEvents.first()], function(requestEvent, callback){
 			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
 			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
-			console.log("!!");
 			self.sendEventEmail(eventModel, request, requestContact)
 			.then(function(request, requestContact, result){
-				console.log("hi");
 				callback(null, request, requestContact, result)
 			})
 			.catch(function(e){
@@ -89,8 +87,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					console.log(err);
 					reject(err);
 				}
-				console.log(results.html);
-				resolve();
 				email.send({
 					to:address, 
 					subject: subject,
@@ -142,21 +138,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				reject("No events");
 			}
 		});
-	}
-
-	self.sendEmails = function(eventModel, emailParams){
-		var email = new Email();
-		return email.send(
-			{
-				"to": emailParams.to,
-				"subject": eventModel.get('email_subject'),
-				"merge_vars": emailParams.merge_vars
-			},
-			{
-				template_name: eventModel.get('email_template'),
-				template_content: []
-			}
-		);
 	}
 
 	self.markEventsAsSent = function(requestEvents, results){
