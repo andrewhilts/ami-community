@@ -45,19 +45,18 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.sendEventEmail = function(eventModel, request, requestContact){
-		console.log("test 1")
 		var email = new Email();
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
 		var request_date = request.get("request_date");
 		var templatePrefix = eventModel.get("email_template");
 		var unsubscribeURL = email.makeUnsubLink(address);
-console.log("test 1.5")
+
 		var language = request.get('language');
 		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
 		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
-		console.log("test 2")
+		console.log("test 1")
 		// Change based on event type
 		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
 		try{
@@ -68,7 +67,7 @@ console.log("test 1.5")
 				reject(e);
 			});
 		}
-
+		console.log("test 2")
 		switch(language){
 			case "en":
 			subject = "A message from Access My Info Hong Kong"
@@ -77,12 +76,14 @@ console.log("test 1.5")
 			subject = "A message from Access My Info Hong Kong"
 			break;
 		}
+		console.log("test 3")
 		var params = {
 			operator_title: operator_title,
 			request_date: request_date,
 			unsubscribeURL: unsubscribeURL,
 			amiLogoPath: amiLogoPath
 		}
+		console.log("test 4")
 		return new Q.Promise(function(resolve,reject){
 			confirmationTemplate.render(params, function(err, results){
 				if(err){
