@@ -27,6 +27,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
 			self.sendEventEmail(eventModel, request, requestContact)
 			.then(function(request, requestContact, result){
+				console.log("SendEventEmailCallback");
 				callback(null, request, requestContact, result)
 			})
 			.catch(function(e){
@@ -37,8 +38,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			});
 		}, function(err){
 			return new Q.Promise(function(resolve,reject){
-				console.log(err);
-				callback(err);
+				resolve(err);
 			});
 		});
 	}
@@ -94,7 +94,6 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					html: results.html
 				})
 				.then(function(result){
-					console.log("hi");
 					resolve(result);
 				})
 				.catch(function(err){
