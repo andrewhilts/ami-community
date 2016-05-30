@@ -146,6 +146,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.markEventsAsSent = function(requestEvents, results){
+		console.log("hi");
 		requestEvents.models.forEach(function(model){
 			model.set({'email_sent': true});
 			model.unset('request');
