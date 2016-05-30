@@ -219,6 +219,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				// 	})
 				// }
 			], function(err, result){
+				console.log("hello");
 				if(err){
 					reject(err);
 				}
