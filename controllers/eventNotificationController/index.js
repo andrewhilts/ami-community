@@ -89,6 +89,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					reject(err);
 				}
 				else{
+					console.log("rendered template");
 					email.send({
 						to:address, 
 						subject: subject,
