@@ -121,6 +121,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.filterRequestEventsByType = function(events){
+		console.log("filtering events by type");
 		return new Q.Promise(function(resolve,reject){
 			groupedEvents = events.groupBy("event_id");
 			if(Object.keys(groupedEvents).length){
@@ -157,6 +158,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.sendRequestEventNotificationType = function(requestEvents){
+		console.log("starting to send request Event for type");
 		return new Q.Promise(function(resolve,reject){
 			async.waterfall([
 				function(callback){
