@@ -37,6 +37,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 				});
 			});
 		}, function(err){
+			console.log("Done async each");
 			return new Q.Promise(function(resolve,reject){
 				resolve(err);
 			});
