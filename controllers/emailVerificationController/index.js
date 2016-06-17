@@ -49,7 +49,7 @@ var RequestContactVerifier = function(Subscription){
 
 		switch(language){
 			case "en":
-			subject = "Confirm your request: Access My Info Hong Kong"
+			subject = "Confirm your request: Access My Info"
 			break;
 			case "zh":
 			subject = "查閱資料要求確認：誰手可得"
