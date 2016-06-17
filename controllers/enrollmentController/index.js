@@ -233,7 +233,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 
 			switch(language){
 				case "en":
-				subject = "Request confirmed: Access My Info Hong Kong"
+				subject = policy.confirmSubjectLine
 				break;
 				case "zh":
 				subject = "Request confirmed: Access My Info Hong Kong"
