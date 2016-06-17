@@ -3,10 +3,10 @@ var unsubscribeController = function(Subscription){
 	var self = this;
 
 	self.deleteContactByEmail = function(email_address){
-		return contact = new Subscription.ContactModel({
+		var contact = new Subscription.ContactModel({
 			"email_address": email_address
-		})
-		.destroy({"require": true, "transacting": true});
+		});
+		return contact.destroy({"require": true, "transacting": true});
 	}
 
 	self.unsubscribe = function(email_address){
