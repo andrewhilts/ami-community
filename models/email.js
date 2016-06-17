@@ -9,8 +9,8 @@ var Email = function(){
 	var self = this;
 	var unsubLink = policy.unsubLink
 	this.message = {
-		"subject": policy.systemEmailAddress,
-		"from": policy.defaultSubjectLine,
+		"subject": policy.defaultSubjectLine,
+		"from": policy.systemEmailAddress,
 	}
 	this.send = function(params){
 		var message = _.defaults(params, self.message);
