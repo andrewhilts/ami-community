@@ -1,5 +1,8 @@
 var async = require('async');
 var emailVerificationController = require('../emailVerificationController').emailVerificationController;
+var policy = require('../../conf/policy.conf').policy;
+var EmailTemplate = require('email-templates').EmailTemplate;
+var Q = require('q');
 
 var enrollmentController = function(Request, Subscription, Event, RequestEvent, Email){
 	this.submit = function(req, res) {
@@ -44,7 +47,8 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				req.body.data.operator.title, 
 				req.body.data.operator.id, 
 				req.body.data.jurisdiction.title, 
-				req.body.data.jurisdiction.id
+				req.body.data.jurisdiction.id,
+				req.body.language
 			)
 			.then(function(savedRequest){
 				callback(null, savedRequest)
@@ -204,6 +208,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				callback(null, request, requestContact);
 			})
 			.catch(function(error){
+				console.log(error);
 				callback({
 					"statusCode": "D1", 
 					"message": "Database Error."
@@ -215,24 +220,51 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			var email = new Email();
 			var address = requestContact.get('email_address');
 			var operator_title = request.get("operator_title");
-			email.send(
-				{
-					"to": [{email: address}],
-					"subject": "Thanks for using Access My Info",
-					"merge_vars": [{
-			            "rcpt": address,
-			            "vars": [{
-		                    "name": "operator_title",
-		                    "content": operator_title
-			            }
-						]
-			        }]
-				},
-				{
-					template_name: "email-confirmation-en",
-					template_content: []
-				}
-			)
+
+			var unsubscribeURL = email.makeUnsubLink(address);
+
+			var language = request.get('language');
+			var jurisdiction = request.get('operator_jurisdiction_id');
+			var subject; 
+			var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
+
+			var templateDir = "emailTemplates/confirmation-"+language+"-"+jurisdiction;
+			var confirmationTemplate = new EmailTemplate(templateDir);
+
+			switch(language){
+				case "en":
+				subject = "Request confirmed: Access My Info Hong Kong"
+				break;
+				case "zh":
+				subject = "Request confirmed: Access My Info Hong Kong"
+				break;
+			}
+			var params = {
+				operator_title: operator_title,
+				unsubscribeURL: unsubscribeURL,
+				amiLogoPath: amiLogoPath
+			}
+			return new Q.Promise(function(resolve,reject){
+				confirmationTemplate.render(params, function(err, results){
+					if(err){
+						console.log(err);
+						reject(err);
+					}
+
+					email.send({
+						to:address, 
+						subject: subject,
+						text: results.text,
+						html: results.html
+					})
+					.then(function(result){
+						resolve(result);
+					})
+					.catch(function(err){
+						reject(err);
+					})
+				});
+			})
 			.then(function(result){
 				callback(null, request, requestContact, result);
 			})

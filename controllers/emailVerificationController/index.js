@@ -5,6 +5,7 @@ var timestamper = require('../../shared/timestamper');
 var moment = require('moment');
 var Email = require('../../models/email').EmailModel;
 var Q = require('q');
+var EmailTemplate = require('email-templates').EmailTemplate;
 
 var RequestContactVerifier = function(Subscription){
 	var self = this;
@@ -34,30 +35,53 @@ var RequestContactVerifier = function(Subscription){
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
 		var token = requestContact.get('verification_token');
+		console.log(token);
 		var verificationURL = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.emailVerification + "?token=" + token;
-		return email.send(
-			{
-				"to": [{email: address}],
-				"subject": "Confirm your request: Access My Info",
-				"merge_vars": [{
-		            "rcpt": address,
-		            "vars": [
-		            	{
-		                    "name": "operator_title",
-		                    "content": operator_title
-		            	},
-		            	{
-		                    "name": "verificationURL",
-		                    "content": verificationURL
-		            	}
-		            ]
-		        }]
-			},
-			{
-				template_name: "signup-en",
-				template_content: []
-			}
-		);
+		var unsubscribeURL = email.makeUnsubLink(address);
+
+		var language = request.get('language');
+		var jurisdiction = request.get('operator_jurisdiction_id');
+		var subject; 
+
+		var templateDir = "emailTemplates/verification-"+language+"-"+jurisdiction;
+		var verificationTemplate = new EmailTemplate(templateDir);
+		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
+
+		switch(language){
+			case "en":
+			subject = "Confirm your request: Access My Info Hong Kong"
+			break;
+			case "zh":
+			subject = "查閱資料要求確認：誰手可得"
+			break;
+		}
+		var params = {
+			operator_title: operator_title,
+			verificationURL: verificationURL,
+			unsubscribeURL: unsubscribeURL,
+			amiLogoPath: amiLogoPath
+		}
+		return new Q.Promise(function(resolve,reject){
+			verificationTemplate.render(params, function(err, results){
+				if(err){
+					console.log(err);
+					reject(err);
+				}
+
+				email.send({
+					to:address, 
+					subject: subject,
+					text: results.text,
+					html: results.html
+				})
+				.then(function(result){
+					resolve(result);
+				})
+				.catch(function(err){
+					reject(err);
+				})
+			});
+		});
 	}
 
 	this.getRequestContactByToken = function(token){

@@ -3,6 +3,7 @@ var Q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 var policy = require('../../conf/policy.conf').policy;
+var EmailTemplate = require('email-templates').EmailTemplate;
 
 var EventNotificationController = function(Event, Request, RequestEvent){
 	var self = this;
@@ -12,54 +13,98 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.getUnsentRequestEventsByDate = function(date){
+		console.log('getting unsent request events');	
 		return new RequestEvent.RequestEventModel()
 		.where('email_schedule_date', '<=', date.format('YYYY-MM-DD'))
 		.where('email_sent', false)
 		.fetchAll();
 	}
 
-	self.buildEventEmailParams = function(eventModel, requestEvents, requests, requestContacts){
-		return new Q.Promise(function(resolve,reject){
-			var params = {
-				"to": [],
-				"merge_vars": []
-			};
-			// Merge requst events with associated request
-			requestEvents.models.forEach(function(model){
-				var request_id = model.get('request_id')
-				var request = requests.get(request_id);
-				var requestContact = requestContacts.where({'request_id': request_id})[0];
-				model.set({
-					'request': request,
-					'requestContact': requestContact
-				});
+	self.sendEventEmails = function(eventModel, requestEvents, requests, requestContacts, bigCallback){
+		console.log("Starting to send individual emails");
+		async.each(requestEvents.models, function(requestEvent, callback){
+			var requestContact = requestContacts.findWhere({"request_id": requestEvent.get('request_id')});
+			var request = requests.findWhere({"request_id": requestEvent.get('request_id')});
+			self.sendEventEmail(eventModel, request, requestContact)
+			.then(function(request, requestContact, result){
+				console.log("SendEventEmailCallback");
+				callback(null, request, requestContact, result)
 			})
-
-			requestEvents.models.forEach(function(model){
-				var dateString =  moment(model.get('request').get('request_date')).format('MMMM Do YYYY');
-				params.to.push({
-					email: model.get('requestContact').get('email_address')
-				});
-				params.merge_vars.push({
-					rcpt: model.get('requestContact').get('email_address'),
-					vars: [
-						{
-							name: "operator_title",
-							content: model.get('request').get('operator_title')
-						},
-						{
-							name: "request_date",
-							content: dateString
-						}
-					]
+			.catch(function(e){
+				console.log(e);
+				callback({
+					"statusCode": "M1", 
+					"message": "Unable to sent email."
 				});
 			});
-			if(params.to.length){
-				resolve(params);
-			}
-			else{
-				reject("No email addresses");
-			}
+		}, function(err){
+			console.log("Calling back");
+			bigCallback(err, eventModel, requestEvents, requests, requestContacts);
+		});
+	}
+
+	self.sendEventEmail = function(eventModel, request, requestContact){
+		var email = new Email();
+		var address = requestContact.get('email_address');
+		var operator_title = request.get("operator_title");
+		var request_date = request.get("request_date");
+		var templatePrefix = eventModel.get("email_template");
+		var unsubscribeURL = email.makeUnsubLink(address);
+
+		var language = request.get('language');
+		var jurisdiction = request.get('operator_jurisdiction_id');
+		var subject; 
+		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
+
+		// Change based on event type
+		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
+		try{
+			var confirmationTemplate = new EmailTemplate(templateDir);
+		}
+		catch(e){
+			return new Q.Promise(function(resolve,reject){
+				reject(e);
+			});
+		}
+
+		switch(language){
+			case "en":
+			subject = "A message from Access My Info Hong Kong"
+			break;
+			case "zh":
+			subject = "A message from Access My Info Hong Kong"
+			break;
+		}
+
+		var params = {
+			operator_title: operator_title,
+			request_date: request_date,
+			unsubscribeURL: unsubscribeURL,
+			amiLogoPath: amiLogoPath
+		}
+		return new Q.Promise(function(resolve,reject){
+			confirmationTemplate.render(params, function(err, results){
+				if(err){
+					console.log("error", err);
+					reject(err);
+				}
+				else{
+					console.log("rendered template");
+					email.send({
+						to:address, 
+						subject: subject,
+						text: results.text,
+						html: results.html
+					})
+					.then(function(result){
+						console.log("sent");
+						resolve(result);
+					})
+					.catch(function(err){
+						reject(err);
+					})
+				}
+			});
 		});
 	}
 
@@ -88,6 +133,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.filterRequestEventsByType = function(events){
+		console.log("filtering events by type");
 		return new Q.Promise(function(resolve,reject){
 			groupedEvents = events.groupBy("event_id");
 			if(Object.keys(groupedEvents).length){
@@ -99,31 +145,15 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 		});
 	}
 
-	self.sendEmails = function(eventModel, emailParams){
-		var email = new Email();
-		return email.send(
-			{
-				"to": emailParams.to,
-				"subject": eventModel.get('email_subject'),
-				"merge_vars": emailParams.merge_vars
-			},
-			{
-				template_name: eventModel.get('email_template'),
-				template_content: []
-			}
-		);
-	}
-
 	self.markEventsAsSent = function(requestEvents, results){
 		requestEvents.models.forEach(function(model){
 			model.set({'email_sent': true});
-			model.unset('request');
-			model.unset('requestContact');
 		});
 		return requestEvents.invokeThen('save', null);
 	}
 
 	self.sendRequestEventNotificationType = function(requestEvents){
+		console.log("starting to send request event for type");
 		return new Q.Promise(function(resolve,reject){
 			async.waterfall([
 				function(callback){
@@ -142,6 +172,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					})
 				},
 				function(eventModel, requestEvents, callback){
+					console.log("getting request details");
 					self.getRequestDetails(requestEvents)
 					.then(function(requests){
 						if(requests.models.length){
@@ -172,28 +203,12 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					})
 				},
 				function(eventModel, requestEvents, requests, requestContacts, callback){
-					self.buildEventEmailParams(eventModel, requestEvents, requests, requestContacts)
-					.then(function(emailParams){
-						callback(null, eventModel, requestEvents, requests, requestContacts, emailParams)
-					})
-					.catch(function(e){
-						console.log("err", e);
-						callback(e);
-					})
+					self.sendEventEmails(eventModel, requestEvents, requests, requestContacts, callback);
 				},
-				function(eventModel, requestEvents, requests, requestContacts, emailParams, callback){
-					self.sendEmails(eventModel, emailParams)
-					.then(function(result){
-						callback(null, eventModel, requestEvents, requests, requestContacts, emailParams, result)
-					})
-					.catch(function(e){
-						console.log("err", e);
-						callback(e);
-					})
-				},
-				function(eventModel, requestEvents, requests, requestContacts, emailParams, result, callback){
+				function(eventModel, requestEvents, requests, requestContacts,  callback){
 					self.markEventsAsSent(requestEvents)
 					.then(function(result){
+						console.log(result);
 						callback(null, result)
 					})
 					.catch(function(e){
@@ -202,6 +217,7 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 					})
 				}
 			], function(err, result){
+				console.log("hello");
 				if(err){
 					reject(err);
 				}
@@ -286,6 +302,7 @@ var Event = require('../../models/event.js').EventController(bookshelf);
 var notifier = new EventNotificationController(Event, Request, RequestEvent);
 var Email = require('../../models/email').EmailModel;
 
+var run = function(){
 notifier.notify()
 .then(function(result){
 	console.log("done");
@@ -296,4 +313,6 @@ notifier.notify()
 .finally(function(){
 	bookshelf.knex.destroy();
 })
+};
+run();
 
