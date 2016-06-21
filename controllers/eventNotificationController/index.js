@@ -69,10 +69,10 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 
 		switch(language){
 			case "en":
-			subject = "A message from Access My Info Hong Kong"
+			subject = "An invitation to AMI user experience survey"
 			break;
 			case "zh":
-			subject = "A message from Access My Info Hong Kong"
+			subject = "「誰手可得」用戶體驗調查邀請"
 			break;
 		}
 
