@@ -103,7 +103,7 @@ var statsController = function(Request){
 		finalRange = [];
 		for(var i=0; i < dates.length; i++){
 			formattedDateRange.push({
-				"request_date": moment.utc(dates[i], "ddd MMM DD YYYY").format('YYYY-MM-DD'),
+				"request_date": moment.utc(dates[i], 'YYYY-MM-DD').format('YYYY-MM-DD'),
 				"count": dateRange[dates[i]]
 			})
 		}
