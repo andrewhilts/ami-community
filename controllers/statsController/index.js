@@ -102,8 +102,11 @@ var statsController = function(Request){
 		var startDate, endDate, momentRange, finalRange;
 		finalRange = [];
 		for(var i=0; i < dates.length; i++){
+			console.log(dates[i]);
+			console.log(moment(dates[i], "ddd MMM DD YYYY").format('YYYY-MM-DD'));
+			console.log(moment(dates[i] + " UTC", "ddd MMM DD YYYY").format('YYYY-MM-DD'));
 			formattedDateRange.push({
-				"request_date": moment(dates[i] + " UTC", "ddd MMM DD YYYY").format('YYYY-MM-DD'),
+				"request_date": moment(dates[i], "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD'),
 				"count": dateRange[dates[i]]
 			})
 		}
