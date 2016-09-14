@@ -87,6 +87,7 @@ var statsController = function(Request){
 				if(!requests.length){
 					resolve({"count": 0});
 				}
+				console.log(requests.first());
 				dateTotals = requests.countBy("request_date");
 				dateTotals = self.formatDates(dateTotals)
 				resolve(dateTotals);
@@ -102,8 +103,19 @@ var statsController = function(Request){
 		var startDate, endDate, momentRange, finalRange;
 		finalRange = [];
 		for(var i=0; i < dates.length; i++){
+			console.log(typeof dates[i]);
+			console.log(moment(dates[i], "ddd MMM DD YYYY").format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment(dates[i] + " UTC", "ddd MMM DD YYYY").format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment.utc(dates[i], "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment.utc(dates[i], "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment.utc(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment.utc(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment(dates[i], "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment(dates[i], "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+16).format('YYYY-MM-DD, h:mm:ss'));
+			console.log(moment(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
 			formattedDateRange.push({
-				"request_date": moment.utc(dates[i], "ddd MMM DD YYYY").format('YYYY-MM-DD'),
+				"request_date": moment.utc(dates[i], "ddd MMM DD YYYY").add("days", 1).format('YYYY-MM-DD'),
 				"count": dateRange[dates[i]]
 			})
 		}

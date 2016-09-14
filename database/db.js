@@ -5,7 +5,8 @@ console.log(process.env.USER)
 console.log(process.env.SHELL)
 var knex = require('knex')({
   client: 'pg',
-  connection: settings.db_conn
+  connection: settings.db_conn,
+  timezone: "Canada/Eastern"
   // debug: true
 });
 
