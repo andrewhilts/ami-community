@@ -53,7 +53,7 @@ var RequestContactVerifier = function(Subscription){
 			break;
 			case "fr":
 			subject = "Confirmez votre demande : Obtenir mes infos"
-			amiLogoPath = policy.AMIFrontEnd.baseURL + "/images/ami-logo/AMICAFullLogoWhiteBackground_fr.png"
+			amiLogoPath = policy.AMIFrontEnd.baseURL + "/images/ami-logo/AMICAFullLogoWhiteBackground-fr.png"
 			break;
 			case "zh":
 			subject = "查閱資料要求確認：誰手可得"
