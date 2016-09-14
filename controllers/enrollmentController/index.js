@@ -235,8 +235,11 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				case "en":
 				subject = policy.confirmSubjectLine
 				break;
+				case "fr":
+				subject = "Confirmez votre demande : Obtenir mes infos"
+				break;
 				case "zh":
-				subject = "Request confirmed: Access My Info Hong Kong"
+				subject = "Demande confirmée : Obtenir mes infos"
 				break;
 			}
 			var params = {

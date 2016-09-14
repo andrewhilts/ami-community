@@ -51,6 +51,9 @@ var RequestContactVerifier = function(Subscription){
 			case "en":
 			subject = policy.verifySubjectLine
 			break;
+			case "fr":
+			subject = "Confirmez votre demande : Obtenir mes infos"
+			break;
 			case "zh":
 			subject = "查閱資料要求確認：誰手可得"
 			break;
