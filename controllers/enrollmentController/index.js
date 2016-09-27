@@ -237,6 +237,7 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 				break;
 				case "fr":
 				subject = "Confirmez votre demande : Obtenir mes infos"
+				amiLogoPath = policy.AMIFrontEnd.baseURL + "/images/ami-logo/AMICAFullLogoWhiteBackground-fr.png"
 				break;
 				case "zh":
 				subject = "Demande confirmée : Obtenir mes infos"
