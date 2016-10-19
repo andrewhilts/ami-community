@@ -72,6 +72,12 @@ var myErrorLogger = function (err, req, res, next) {
   process.exit(1);
 };
 
+app.get('/', function(req, res){
+  res.json({
+    title: "Welcome to AMI Community Tools"
+  });
+}, myErrorLogger)
+
 app.post('/enroll', enrollmentController.submit, myErrorLogger);
 app.get('/verify', enrollmentController.verifyAndEnroll, myErrorLogger);
 // app.get('/feedback', feedbackController.getForm);
