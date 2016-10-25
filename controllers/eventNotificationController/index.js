@@ -44,17 +44,17 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 	}
 
 	self.sendEventEmail = function(eventModel, request, requestContact){
-		var email = new Email();
+		var language = request.get('language');
+		var email = new Email(language);
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
 		var request_date = request.get("request_date");
 		var templatePrefix = eventModel.get("email_template");
 		var unsubscribeURL = email.makeUnsubLink(address);
 
-		var language = request.get('language');
 		var jurisdiction = request.get('operator_jurisdiction_id');
 		var subject; 
-		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
+		var amiLogoPath;
 
 		// Change based on event type
 		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
@@ -67,16 +67,17 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			});
 		}
 
-		switch(language){
-			case "en":
-			subject = "A message from Access My Info"
-			break;
-			case "fr":
-			subject = "Message : Obtenir mes infos"
-			break;
-			case "zh":
-			subject = "A message from Access My Info"
-			break;
+		if(typeof policy.languages !== "undefined" && typeof policy.languages[language] !== "undefined" && typeof policy.languages[language].logoFileName !== "undefined"){
+				amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo + "/" + policy.languages[language].logoFileName;
+		}
+		else{
+			amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo + "/AMICAFullLogoWhiteBackground.png";
+		}
+		if(typeof policy.languages !== "undefined" && typeof policy.languages[language] !== "undefined" && typeof policy.languages[language].defaultSubjectLine !== "undefined"){
+			subject = policy.languages[language].defaultSubjectLine;
+		}
+		else{
+			subject = "A message from Access My Info";
 		}
 
 		var params = {

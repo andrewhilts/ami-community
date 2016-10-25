@@ -14,6 +14,12 @@ var RequestEvent = require('./models/requestevent.js').RequestEventController(bo
 var Email = require('./models/email.js').EmailModel;
 var Feedback = require('./models/feedback.js').FeedbackModel(bookshelf);
 var policy = require('./conf/policy.conf').policy;
+
+require("fs").readdirSync('./conf/lang').forEach(function(file) {
+  policy = require("./conf/lang/" + file).addLanguageToPolicy(policy);
+});
+
+
 var uuid = require('node-uuid');
 var domain = require('domain');
 
@@ -80,13 +86,13 @@ app.get('/', function(req, res){
 
 app.post('/enroll', enrollmentController.submit, myErrorLogger);
 app.get('/verify', enrollmentController.verifyAndEnroll, myErrorLogger);
-// app.get('/feedback', feedbackController.getForm);
-app.post('/feedback', feedbackController.submit, myErrorLogger);
 app.post('/unsubscribe', unsubscribeController.unsubHandler, myErrorLogger);
 app.get('/stats/:method/:jurisdiction', statsController.methodAllocator, myErrorLogger);
-app.all("*", myErrorLogger);
+// app.get('/feedback', feedbackController.getForm);
+// app.post('/feedback', feedbackController.submit, myErrorLogger);
 // app.use(cookieParser({''}));
 // app.use(csrf());
+app.all("*", myErrorLogger);
 
 
 app.listen(app.get('port'), function() {

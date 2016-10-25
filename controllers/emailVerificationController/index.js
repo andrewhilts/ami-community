@@ -31,7 +31,8 @@ var RequestContactVerifier = function(Subscription){
 	}
 
 	this.sendVerificationEmail = function(request, requestContact){
-		var email = new Email();
+		var language = request.get('language');
+		var email = new Email(language);
 		var address = requestContact.get('email_address');
 		var operator_title = request.get("operator_title");
 		var token = requestContact.get('verification_token');
@@ -39,26 +40,25 @@ var RequestContactVerifier = function(Subscription){
 		var verificationURL = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.emailVerification + "?token=" + token;
 		var unsubscribeURL = email.makeUnsubLink(address);
 
-		var language = request.get('language');
 		var jurisdiction = request.get('operator_jurisdiction_id');
-		var subject; 
+		var subject, amiLogoPath; 
 
 		var templateDir = "emailTemplates/verification-"+language+"-"+jurisdiction;
 		var verificationTemplate = new EmailTemplate(templateDir);
-		var amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo;
 
-		switch(language){
-			case "en":
-			subject = policy.verifySubjectLine
-			break;
-			case "fr":
-			subject = "Confirmez votre demande : Obtenir mes infos"
-			amiLogoPath = policy.AMIFrontEnd.baseURL + "/images/ami-logo/AMICAFullLogoWhiteBackground-fr.png"
-			break;
-			case "zh":
-			subject = "查閱資料要求確認：誰手可得"
-			break;
+		if(typeof policy.languages !== "undefined" && typeof policy.languages[language] !== "undefined" && typeof policy.languages[language].logoFileName !== "undefined"){
+			amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo + "/" + policy.languages[language].logoFileName;
 		}
+		else{
+			amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo + "/AMICAFullLogoWhiteBackground.png";
+		}
+		if(typeof policy.languages !== "undefined" && typeof policy.languages[language] !== "undefined" && typeof policy.languages[language].verifySubjectLine !== "undefined"){
+			subject = policy.languages[language].verifySubjectLine;
+		}
+		else{
+			subject = "Confirm your request: Access My Info";
+		}
+		console.log(subject, amiLogoPath);
 		var params = {
 			operator_title: operator_title,
 			verificationURL: verificationURL,
@@ -82,6 +82,7 @@ var RequestContactVerifier = function(Subscription){
 					resolve(result);
 				})
 				.catch(function(err){
+					console.log(err);
 					reject(err);
 				})
 			});
