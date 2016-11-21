@@ -7,14 +7,14 @@ var Event = require('../models/event').EventController(bookshelf);
 
 // Install jurisdiction event profiles
 var path = '../jurisdiction_events/';
-// fs.readdir(path, function(err, files){
-// 	if(!err){
-// 		async.forEachOf(files, parseEventFile, function(err){
-// 			if(err) console.log(err);
-// 			console.log("hi");
-// 		});
-// 	}
-// });
+ fs.readdir(path, function(err, files){
+ 	if(!err){
+ 		async.forEachOf(files, parseEventFile, function(err){
+ 			if(err) console.log(err);
+ 			console.log("hi");
+ 		});
+ 	}
+ });
 saveEventFile = function(filename){
 	parseEventFile(filename, null, function(err){
 		if(err) console.log(err);
