@@ -77,7 +77,12 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 			amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo + "/AMICAFullLogoWhiteBackground.png";
 		}
 		if(typeof policy.languages !== "undefined" && typeof policy.languages[language] !== "undefined" && typeof policy.languages[language].defaultSubjectLine !== "undefined"){
-			subject = policy.languages[language].defaultSubjectLine;
+			if(typeof policy.languages[language][templatePrefix] !== "undefined"){
+				subject = policy.languages[language][templatePrefix];
+			}
+			else{
+				subject = policy.languages[language].defaultSubjectLine;
+			}
 		}
 		else{
 			subject = "A message from Access My Info";
