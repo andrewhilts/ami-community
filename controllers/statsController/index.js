@@ -2,6 +2,7 @@ var async = require('async');
 var Q = require('q');
 var _ = require('lodash');
 var moment = require('moment');
+var knex = require('knex');
 require('moment-range');
 
 var statsController = function(Request){
@@ -75,7 +76,7 @@ var statsController = function(Request){
 			})
 		});
 	}
-	self.getByDate = function(jurisdiction_id){
+	self.getByDate = function(jurisdiction_id, cumulative){
 		var dates = new Request.RequestCollection()
 		.query(function(qb){
 			qb.where('operator_jurisdiction_id', jurisdiction_id);
@@ -88,8 +89,12 @@ var statsController = function(Request){
 					resolve({"count": 0});
 				}
 				console.log(requests.first());
-				dateTotals = requests.countBy("request_date");
-				dateTotals = self.formatDates(dateTotals)
+				requests.each(function(request){
+					request.set("month", moment.utc(request.get("request_date"), "ddd MMM DD YYYY").add("days", 1).format('MMM YYYY'));
+				})
+				// console.log(requets[0]["month"]);
+				dateTotals = requests.countBy("month");
+				dateTotals = self.formatDates(dateTotals, cumulative)
 				resolve(dateTotals);
 			})
 			.catch(function(err){
@@ -97,33 +102,33 @@ var statsController = function(Request){
 			})
 		});
 	}
-	self.formatDates = function(dateRange){
+	self.formatDates = function(dateRange, cumulative){
 		var dates = Object.keys(dateRange);
 		var formattedDateRange = [];
 		var startDate, endDate, momentRange, finalRange;
 		finalRange = [];
 		for(var i=0; i < dates.length; i++){
-			console.log(typeof dates[i]);
-			console.log(moment(dates[i], "ddd MMM DD YYYY").format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment(dates[i] + " UTC", "ddd MMM DD YYYY").format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment.utc(dates[i], "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment.utc(dates[i], "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment.utc(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment.utc(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment(dates[i], "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment(dates[i], "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+16).format('YYYY-MM-DD, h:mm:ss'));
-			console.log(moment(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(typeof dates[i]);
+			// console.log(moment(dates[i], "ddd MMM DD YYYY").format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment(dates[i] + " UTC", "ddd MMM DD YYYY").format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment.utc(dates[i], "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment.utc(dates[i], "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment.utc(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment.utc(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment(dates[i], "ddd MMM DD YYYY").utcOffset(-4).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment(dates[i], "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+16).format('YYYY-MM-DD, h:mm:ss'));
+			// console.log(moment(dates[i]+ " UTC", "ddd MMM DD YYYY").utcOffset(+4).format('YYYY-MM-DD, h:mm:ss'));
 			formattedDateRange.push({
-				"request_date": moment.utc(dates[i], "ddd MMM DD YYYY").add("days", 1).format('YYYY-MM-DD'),
+				"request_date": moment.utc(dates[i], "MMM YYYY").format('MMM YYYY'),
 				"count": dateRange[dates[i]]
 			})
 		}
-		startDate = moment(formattedDateRange[0].request_date, 'YYYY-MM-DD')
-		endDate = moment(formattedDateRange[formattedDateRange.length-1].request_date, 'YYYY-MM-DD')
+		startDate = moment(formattedDateRange[0].request_date, 'MMM YYYY')
+		endDate = moment(formattedDateRange[formattedDateRange.length-1].request_date, 'MMM YYYY')
 		momentRange = moment.range(startDate, endDate);
-		momentRange.by('days', function(moment){
-			dateStr = moment.format('YYYY-MM-DD');
+		momentRange.by('months', function(moment){
+			dateStr = moment.format('MMM YYYY');
 			var finalData = {};
 			var dateData = _.find(formattedDateRange, {"request_date": dateStr})
 			if(dateData){
@@ -136,6 +141,13 @@ var statsController = function(Request){
 			}
 			finalRange.push(finalData);
 		});
+		if(cumulative){
+			for(var i = 0; i < finalRange.length; i++){
+				if(i > 0){
+					finalRange[i].count = finalRange[i-1].count + finalRange[i].count;
+				}
+			}
+		}
 		return finalRange;
 	}
 	self.methodAllocator = function(req, res){
@@ -159,7 +171,10 @@ var statsController = function(Request){
 				jsonPromise = self.getByCompany(jurisdiction);
 			break;
 			case "getByDate":
-				jsonPromise = self.getByDate(jurisdiction);
+				jsonPromise = self.getByDate(jurisdiction, false);
+			break;
+			case "getByDateCumulative":
+				jsonPromise = self.getByDate(jurisdiction, true);
 			break;
 			default:
 				res.status(404).json({msg: "error"});
