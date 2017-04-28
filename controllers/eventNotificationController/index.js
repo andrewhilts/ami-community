@@ -6,6 +6,7 @@ var policy = require('../../conf/policy.conf').policy;
 require("fs").readdirSync('../../conf/lang').forEach(function(file) {
   policy = require("../../conf/lang/" + file).addLanguageToPolicy(policy);
 });
+var fs = require("fs");
 var EmailTemplate = require('email-templates').EmailTemplate;
 
 var EventNotificationController = function(Event, Request, RequestEvent){
@@ -61,6 +62,9 @@ var EventNotificationController = function(Event, Request, RequestEvent){
 
 		// Change based on event type
 		var templateDir = "../../emailTemplates/"+templatePrefix+"-"+language+"-"+jurisdiction;
+		if(!fs.existsSync(templateDir)){
+			templateDir = "../../emailTemplates/"+templatePrefix+"-default";
+		}
 		try{
 			var confirmationTemplate = new EmailTemplate(templateDir);
 		}

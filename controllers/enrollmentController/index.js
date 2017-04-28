@@ -3,6 +3,7 @@ var emailVerificationController = require('../emailVerificationController').emai
 var policy = require('../../conf/policy.conf').policy;
 var EmailTemplate = require('email-templates').EmailTemplate;
 var Q = require('q');
+var fs = require('fs');
 
 /*
 This controller enrolls a user to receive notifications.
@@ -249,7 +250,11 @@ var enrollmentController = function(Request, Subscription, Event, RequestEvent, 
 			var subject, amiLogoPath;
 
 			var templateDir = "emailTemplates/confirmation-"+language+"-"+jurisdiction;
+			if(!fs.existsSync(templateDir)){
+				templateDir = "emailTemplates/confirmation-default";
+			}
 			var confirmationTemplate = new EmailTemplate(templateDir);
+
 
 			if(typeof policy.languages !== "undefined" && typeof policy.languages[language] !== "undefined" && typeof policy.languages[language].logoFileName !== "undefined"){
 				amiLogoPath = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.logo + "/" + policy.languages[language].logoFileName;

@@ -6,6 +6,7 @@ var moment = require('moment');
 var Email = require('../../models/email').EmailModel;
 var Q = require('q');
 var EmailTemplate = require('email-templates').EmailTemplate;
+var fs = require('fs');
 
 var RequestContactVerifier = function(Subscription){
 	var self = this;
@@ -44,6 +45,10 @@ var RequestContactVerifier = function(Subscription){
 		var subject, amiLogoPath; 
 
 		var templateDir = "emailTemplates/verification-"+language+"-"+jurisdiction;
+		if(!fs.existsSync(templateDir)){
+			templateDir = "emailTemplates/verification-default";
+		}
+
 		var verificationTemplate = new EmailTemplate(templateDir);
 
 		if(typeof policy.languages !== "undefined" && typeof policy.languages[language] !== "undefined" && typeof policy.languages[language].logoFileName !== "undefined"){
@@ -71,7 +76,6 @@ var RequestContactVerifier = function(Subscription){
 					console.log(err);
 					reject(err);
 				}
-
 				email.send({
 					to:address, 
 					subject: subject,
