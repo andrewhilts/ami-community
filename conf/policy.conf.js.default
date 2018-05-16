@@ -1,0 +1,22 @@
+var policy = {
+	rateLimitMaxPerMinute: 10,
+	verificationTokenExpirationDays: 10,
+	AMIFrontEnd: {
+		baseURL: "https://accessmyinfo.org",
+		paths: {
+			feedback: "#/feedback",
+			unsubscribe: "#/unsubscribe",
+			emailVerification: "#/verify",
+			requestHelp: "#/requestHelp",
+			logo: "/images/ami-logo/"
+		}
+	},
+	languages: {}
+}
+policy.systemEmailAddress = "info@accessmyinfo.org";
+policy.defaultSubjectLine = "A message from Access My Info"
+policy.verifySubjectLine = "Confirm your request: Access My Info"
+policy.confirmSubjectLine = "Request confirmed: Access My Info"
+policy.emailVerificationURL = policy.AMIFrontEnd.baseURL +"/verify",
+policy.unsubLink = policy.AMIFrontEnd.baseURL + policy.AMIFrontEnd.paths.unsubscribe;
+exports.policy = policy;

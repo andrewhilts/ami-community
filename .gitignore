@@ -1,4 +1,5 @@
 node_modules
-conf
-conf/*
+conf/policy.conf.js
+conf/db.conf.js
+conf/sendgrid.conf.js
 .DS_Store
