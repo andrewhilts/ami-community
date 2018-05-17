@@ -64,9 +64,11 @@ var statsController = require('./controllers/statsController/index.js').statsCon
 app.set('port', process.env.PORT || 3000);
 
 app.use(helmet());
-// app.use(cors({
-//  origin: policy.AMIFrontEnd.baseURL
-// }));
+// Comment this CORS out if you have community tools running behind a proxy like NGINX, and set it there
+app.use(cors({
+ origin: policy.AMIFrontEnd.baseURL
+}));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(limiter);
@@ -80,7 +82,7 @@ var myErrorLogger = function (err, req, res, next) {
 
 app.get('/', function(req, res){
   res.json({
-    title: "Welcome to AMI Community Tools"
+    title: "Welcome to AMI Community Tools!"
   });
 }, myErrorLogger)
 

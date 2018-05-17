@@ -2,7 +2,7 @@ var policy = {
 	rateLimitMaxPerMinute: 10,
 	verificationTokenExpirationDays: 10,
 	AMIFrontEnd: {
-		baseURL: "https://accessmyinfo.org",
+		baseURL: "http://localhost:3333",
 		paths: {
 			feedback: "#/feedback",
 			unsubscribe: "#/unsubscribe",

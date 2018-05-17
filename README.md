@@ -2,8 +2,6 @@
 
 AMI Community Tools provides notification and statistical functionality to the overall AMI System.
 
-This README assumes that you've set up an entire AMI system environment per https://github.com/andrewhilts/ami-system
-
 ##How it works
 AMI Community Tools is primarily a JSON-based API that the AMI frontend interacts with. API endpoints are as follows:
 
@@ -18,7 +16,7 @@ AMI Community Tools is primarily a JSON-based API that the AMI frontend interact
 A Cron job runs daily to send scheduled notifications to verified and subscribed email addresses. Emails are based on email templates that must be created for each jurisdiction event. See below for details.
 
 ##Initial Setup
-Assuming that you've installed AMI Community Tools via [AMI System](https://github.com/andrewhilts/ami-system) build scripts, you should have the ami-community service running on your AMI system machine.
+Assuming that you've installed AMI Community Tools via [AMI Docker](https://github.com/citizenlab/ami-docker) build scripts, you should have the ami-community service running on Docker.
 
 Once installed, some customization needs to be done to properly send notifications to AMI users.
 
@@ -110,10 +108,7 @@ Within each email template folder, 2 files must exist: html.handlebars and text.
 
 As the name indicates, the email template files use the [handlebars](http://handlebarsjs.com/) templating engine to populate the templates with variables (such as an unsubscribe link, the AMI logo, and more) when sending the message.
 
-As the names of each file indicate, html.handlebars is used for HTML emails, while text.handlebars is for plaintext equivalents. Both are required,.
-
-#Cron Job
-
+As the names of each file indicate, html.handlebars is used for HTML emails, while text.handlebars is for plaintext equivalents. Both are required.
 
 #Statistics
 The AMI Community tools provides basic statistical reporting about requests that have been saved to the system. Each report type is referred to as a `method` in the code. Below are the current methods:
