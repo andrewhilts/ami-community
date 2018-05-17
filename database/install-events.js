@@ -10,15 +10,23 @@ var path = '../jurisdiction_events/';
  fs.readdir(path, function(err, files){
  	if(!err){
  		async.forEachOf(files, parseEventFile, function(err){
- 			if(err) console.log(err);
- 			console.log("hi");
- 		});
- 	}
+ 			if(err) {
+				console.log(err.detail);
+			 	console.log("Jurisdiction event not created.");
+			}
+			else{
+				console.log("Jurisdiction event not created.");
+			}
+			bookshelf.knex.destroy();
+		 });
+	 }
+	 else{
+		bookshelf.knex.destroy();
+	 }
  });
 saveEventFile = function(filename){
 	parseEventFile(filename, null, function(err){
 		if(err) console.log(err);
-		console.log("hi");
 	});
 }
 
@@ -35,8 +43,6 @@ parseEventFile = function(value, key, callback){
 					formattedData = formatDataForSave(data);
 					if(formattedData){
 						async.forEachOf(formattedData, saveEvent, function(err){
-							if(err) console.log(err);
-							console.log("hi");
 							callback(err);
 						});
 					}
@@ -66,7 +72,6 @@ saveEvent = function(eventObj, key, callback){
 		callback();
 	})
 	.catch(function(err){
-		console.log(err);
 		callback(err);
 	});
 }
